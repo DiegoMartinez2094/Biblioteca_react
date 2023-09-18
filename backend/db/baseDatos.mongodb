@@ -1,0 +1,54 @@
+use ("prestamo")
+db.createCollection("user",{
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["User_ID", "User_Name", "Password","Email","Phone","Address","Email_Address","Role"],
+        properties: {
+            User_ID: {
+            bsonType: "int",
+            description: "User_ID could be of string type and is required"
+          },
+          User_Name: {
+            bsonType: "string",
+            description: "User_Name could be of string type and is required"
+          },
+          Password: {
+            bsonType: "string",
+            description: "Password could be of string type and is required"
+          },
+          Email: {
+            bsonType: "string",
+            description: "Email could be of string type and is required"
+          },
+          Phone: {
+            bsonType: "string",
+            description: "Phone could be of string type and is required"
+          },
+          Address: {
+            bsonType: "string",
+            description: "Address could be of string type and is required"
+          },
+          Email_Address: {
+            bsonType: "string",
+            description: "Email_Address could be of string type and is required"
+          },
+          Role: {
+            bsonType: "string",
+            description: "Role could be of string type and is required"
+          },
+          }
+        }
+      }
+    }
+  );
+
+db.user.insertMany([{ 
+    User_ID: 1,
+    User_Name: 'usuario1',
+    Password: 'contraseña1',
+    Email: 'usuario1@email.com',
+    Phone: '1234567890',
+    Address: 'Dirección 1',
+    Email_Address: 'usuario1@email.com',
+    Role: 'Usuario'}])

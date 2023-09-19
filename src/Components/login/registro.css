@@ -1,0 +1,48 @@
+/* registro.css */
+
+/* Estilos para el contenedor principal del formulario */
+div {
+  max-width: 300px;
+  margin:1px auto;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #6472e3;
+  border-radius: 30px;
+  text-align: center; /* Centro el contenido horizontalmente */
+}
+
+/* Estilos para las etiquetas de los campos */
+label {
+  text-align: center;
+  display: block;
+  font-weight: bold;
+  margin-bottom: 1px; /* Reducido el espacio entre etiquetas */
+}
+
+/* Estilos para los campos de entrada */
+input {
+  padding: 5px;
+  margin-bottom: 5px; /* Añadido un valor de espacio entre campos */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Estilos para el botón */
+button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #000000;
+  border-color: black;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.5s ease;
+  margin-bottom: 10px; /* Reducido el espacio superior del botón */
+}
+
+/* Estilos para el botón al pasar el cursor por encima */
+button:hover {
+  background-color: #f8f9fb;
+}

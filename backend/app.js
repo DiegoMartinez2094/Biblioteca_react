@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import { con } from './db/atlas.js';
+import { con } from './db/Atlas.js';
 import cors from 'cors'; // Importa el middleware CORS
 
 dotenv.config();

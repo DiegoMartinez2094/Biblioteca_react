@@ -1,41 +1,44 @@
 /* registro.css */
-body{
-  background-color: #000000;
-  margin-top: 20px;
+#contenedor{
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
 }
-/* Estilos para el contenedor principal del formulario */
+
+body{
+  background-color: #ffffff;
+  margin-top: 30px;
+}
+
 div {
   max-width: 250px;
   margin:1px auto;
   padding-left: 10px;
   padding-right: 10px;
-  background-color: #7681e8;
+  background-color: #96bfd7;
   border-radius: 30px;
-  text-align: center; /* Centro el contenido horizontalmente */
+  text-align: center; 
   padding-top: 3px; 
-  
 }
 
-/* Estilos para las etiquetas de los campos */
+
 label {
   text-align: center;
-  display: block;
   font-weight: bold;
-  margin-bottom: 1px; /* Reducido el espacio entre etiquetas */
+  margin-bottom: 1px; 
+  font-size: 10px;
+  margin-bottom: 5px;
 }
 
-/* Estilos para los campos de entrada */
 input, select {
   padding: 5px;
   margin-bottom: 5px;
-/* Añadido un valor de espacio entre campos */
+
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 100%;
   text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
 }
 
-/* Estilos para el botón */
 button {
   padding: 5px 10px;
   background-color: #007bff;
@@ -43,12 +46,13 @@ button {
   border-color: black;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 11px;
   transition: background-color 0.5s ease;
-  margin-bottom: 10px; /* Reducido el espacio superior del botón */
+  margin-bottom: 10px; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-/* Estilos para el botón al pasar el cursor por encima */
+
 button:hover {
   background-color: #f8f9fb;
 }

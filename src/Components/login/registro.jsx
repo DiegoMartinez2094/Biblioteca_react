@@ -14,7 +14,13 @@ export default function RegistroForm() {
   const [Role, setRole] = useState('');
 
   const onUser_idChange = (e) => {
-    setUser_id(e.target.value);
+  
+    const numericValue = parseInt(e.target.value);  // Intentar convertir el valor de User_id en un número
+    if (!isNaN(numericValue)) { // Verificar si la conversión fue exitosa
+      setUser_id(numericValue); // Almacena el valor como número
+    } else {
+      setUser_id(''); // Establece el valor como cadena vacía si no es un número válido
+    }
   };
   const onUser_nameChange = (e) => {
     setUser_name(e.target.value);
@@ -37,20 +43,44 @@ export default function RegistroForm() {
 
 
   const onRegistroClick = async () => {
+    if (isNaN(User_id)) {  // Validar que User_id sea un número
+      alert('El ID debe ser un número.');
+      return;
+    }
+    if (!User_id || !User_name || !Password || !Email || !Phone || !Address || !Role) {    // Validar que todos los campos estén llenos
+      alert('Por favor, complete todos los campos.');
+      return;
+    }
+
+  
     try {
+      // Verificar si el correo electrónico ya está registrado
+      const emailExistsResponse = await fetch('http://127.10.10.10:5000/api/verificarEmail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ Email }),
+      });
+  
+      if (emailExistsResponse.status === 200) {
+        // El correo electrónico ya está registrado
+        alert('Credenciales registradas anteriormente');
+        return;
+      }
+  
+      // Continuar con el registro si el correo electrónico no existe
       const response = await fetch('http://127.10.10.10:5000/api/registrar', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ User_id, User_name, Password, Email, Phone, Address, Role   }),
+        body: JSON.stringify({ User_id, User_name, Password, Email, Phone, Address, Role }),
       });
-
+  
       if (response.status === 201) {
-        // Registro exitoso, puedes redirigir o mostrar un mensaje de éxito
-        console.log('Usuario registrado correctamente');
         alert('Usuario registrado correctamente');
-
+  
         // Limpiar los campos después del registro exitoso
         setUser_id('');
         setUser_name('');
@@ -59,11 +89,10 @@ export default function RegistroForm() {
         setPhone('');
         setAddress('');
         setRole('');
-       
       } else {
         // Manejar errores aquí
         console.error('Error al registrar usuario registro.jsx');
-        alert('credenciales registradas anteriormente');
+        alert('Se produjo un error en el registro.');
         setUser_id('');
         setUser_name('');
         setEmail('');
@@ -76,11 +105,12 @@ export default function RegistroForm() {
       console.error('Error al realizar la solicitud:', error);
     }
   };
+  
 
   return (
     <div>
         <div>
-        <label htmlFor="User_id">Id del Usuario: </label>
+        <label htmlFor="User_id">Id del usuario: </label>
         <input
           type="text"
           id="User_id"
@@ -88,10 +118,9 @@ export default function RegistroForm() {
           onChange={onUser_idChange}
           value={User_id}
         />
-        <br/><br/>
       </div>
       <div>
-        <label htmlFor="User_name">Nombre del Usuario: </label>
+        <label htmlFor="User_name">Nombre del usuario: </label>
         <input
           type="text"
           id="User_name"
@@ -99,7 +128,6 @@ export default function RegistroForm() {
           onChange={onUser_nameChange}
           value={User_name}
         />
-        <br/><br/>
       </div>
       <div>
         <label htmlFor="Password">Contraseña: </label>
@@ -110,10 +138,9 @@ export default function RegistroForm() {
           onChange={onPasswordChange}
           value={Password}
         />
-        <br/><br/>
       </div>
       <div>
-        <label htmlFor="Email">Correo Electrónico: </label>
+        <label htmlFor="Email">Correo electrónico: </label>
         <input 
           type="text"
           id="Email"
@@ -121,7 +148,6 @@ export default function RegistroForm() {
           onChange={onEmailChange}
           value={Email}
         />
-        <br/><br/>
       </div>
      
       <div>
@@ -133,7 +159,7 @@ export default function RegistroForm() {
           onChange={onPhoneChange}
           value={Phone}
         />
-        <br/><br/>
+       
       </div>
       <div>
         <label htmlFor="Address">Direccion del usuario: </label>
@@ -144,17 +170,21 @@ export default function RegistroForm() {
           onChange={onAddressChange}
           value={Address}
         />
-        <br/><br/>
+      
       </div>
       <div>
         <label htmlFor="Role">Rol del usuario: </label>
-        <input
-          type="text"
-          id="Role"
-          name="Role"
-          onChange={onRoleChange}
-          value={Role}
-        />
+        <select
+  id="Role"
+  name="Role"
+  onChange={onRoleChange}
+  value={Role}
+>
+  <option value="">Seleccione el rol</option>
+  <option value="administrador">Administrador</option>
+  <option value="trabajador">Trabajador</option>
+  <option value="usuario">Usuario</option>
+</select>
         <br/><br/>
       </div>
       <button onClick={onRegistroClick}>Registrar</button>

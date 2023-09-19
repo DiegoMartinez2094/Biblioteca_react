@@ -21,14 +21,8 @@ const config = JSON.parse(process.env.My_server);
     try {
       const { User_id, User_name, Password, Email, Phone, Address, Role } = req.body;
       
-      // Asegúrate de que User_id sea un número entero
-      const parsedUser_id = parseInt(User_id);
-      if (isNaN(parsedUser_id)) {
-        throw new Error('User_id debe ser un número entero');
-      }
-
       const userData = {
-        User_id: parsedUser_id, // User_id debe ser un número entero
+        User_id, 
         User_name,
         Password,
         Email,
@@ -47,6 +41,28 @@ const config = JSON.parse(process.env.My_server);
       res.status(500).json({ message: 'Error al registrar usuario app.js' });
     }
   });
+
+  app.post('/api/verificarEmail', async (req, res) => {
+    try {
+      const { Email } = req.body;
+  
+      // Buscar el correo electrónico en la base de datos
+      const existingUser = await usuarios.findOne({ Email });
+  
+      if (existingUser) {
+        // El correo electrónico ya está registrado
+        res.status(200).json({ message: 'Correo electrónico ya registrado' });
+      } else {
+        // El correo electrónico no está registrado
+        res.status(404).json({ message: 'Correo electrónico no registrado' });
+      }
+    } catch (error) {
+      // Manejar errores, si los hay
+      console.error('Error al verificar correo electrónico app.js:', error);
+      res.status(500).json({ message: 'Error al verificar correo electrónico app.js' });
+    }
+  });
+  
 
   app.listen(config.port, config.hostname, () => {
     console.log(`Servidor iniciado en http://${config.hostname}:${config.port}`);

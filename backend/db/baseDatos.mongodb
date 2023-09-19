@@ -1,17 +1,17 @@
-use ("prestamo")
+use ("Borrow")
 db.createCollection("user",{
     validator: {
       $jsonSchema: {
         bsonType: "object",
-        required: ["User_ID", "User_Name", "Password","Email","Phone","Address","Email_Address","Role"],
+        required: ["User_id", "User_name", "Password","Email","Phone","Address","Role"],
         properties: {
-            User_ID: {
+            User_id: {
             bsonType: "int",
-            description: "User_ID could be of string type and is required"
+            description: "User_id could be of string type and is required"
           },
-          User_Name: {
+          User_name: {
             bsonType: "string",
-            description: "User_Name could be of string type and is required"
+            description: "User_name could be of string type and is required"
           },
           Password: {
             bsonType: "string",
@@ -29,10 +29,6 @@ db.createCollection("user",{
             bsonType: "string",
             description: "Address could be of string type and is required"
           },
-          Email_Address: {
-            bsonType: "string",
-            description: "Email_Address could be of string type and is required"
-          },
           Role: {
             bsonType: "string",
             description: "Role could be of string type and is required"
@@ -44,11 +40,10 @@ db.createCollection("user",{
   );
 
 db.user.insertMany([{ 
-    User_ID: 1,
-    User_Name: 'usuario1',
+    User_id: 1,
+    User_name: 'usuario1',
     Password: 'contraseña1',
     Email: 'usuario1@email.com',
     Phone: '1234567890',
     Address: 'Dirección 1',
-    Email_Address: 'usuario1@email.com',
     Role: 'Usuario'}])

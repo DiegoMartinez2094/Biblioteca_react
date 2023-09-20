@@ -8,7 +8,7 @@ body{
   margin-top: 30px;
 }
 
-div {
+#register {
   max-width: 250px;
   margin:1px auto;
   padding-left: 10px;
@@ -20,7 +20,7 @@ div {
 }
 
 
-label {
+#one {
   text-align: center;
   font-weight: bold;
   margin-bottom: 1px; 
@@ -28,7 +28,7 @@ label {
   margin-bottom: 5px;
 }
 
-input, select {
+  #User_id,#User_name,#Password,#Email,#Phone, #Address, #Role{
   padding: 5px;
   margin-bottom: 5px;
 
@@ -39,7 +39,7 @@ input, select {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
 }
 
-button {
+#registro_adm {
   padding: 5px 10px;
   background-color: #007bff;
   color: #000000;
@@ -53,6 +53,6 @@ button {
 }
 
 
-button:hover {
+#registro_adm:hover {
   background-color: #f8f9fb;
 }

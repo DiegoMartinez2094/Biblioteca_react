@@ -108,9 +108,9 @@ export default function RegistroForm() {
   
 
   return (
-    <div>
-        <div>
-        <label htmlFor="User_id">Id del usuario: </label>
+    <div id='register'>
+        <div id='register'>
+        <label id='one' htmlFor="User_id">Id del usuario: </label>
         <input
           type="text"
           id="User_id"
@@ -119,8 +119,8 @@ export default function RegistroForm() {
           value={User_id}
         />
       </div>
-      <div>
-        <label htmlFor="User_name">Nombre del usuario: </label>
+      <div id='register'>
+        <label id='one' htmlFor="User_name">Nombre del usuario: </label>
         <input
           type="text"
           id="User_name"
@@ -129,8 +129,8 @@ export default function RegistroForm() {
           value={User_name}
         />
       </div>
-      <div>
-        <label htmlFor="Password">Contraseña: </label>
+      <div id='register'>
+        <label id='one' htmlFor="Password">Contraseña: </label>
         <input
           type="password"
           id="Password"
@@ -139,8 +139,8 @@ export default function RegistroForm() {
           value={Password}
         />
       </div>
-      <div>
-        <label htmlFor="Email">Correo electrónico: </label>
+      <div id='register'>
+        <label id='one' htmlFor="Email">Correo electrónico: </label>
         <input 
           type="text"
           id="Email"
@@ -150,8 +150,8 @@ export default function RegistroForm() {
         />
       </div>
      
-      <div>
-        <label htmlFor="Phone">Telefono del usuario: </label>
+      <div id='register'>
+        <label id='one' htmlFor="Phone">Telefono del usuario: </label>
         <input
           type="text"
           id="Phone"
@@ -161,8 +161,8 @@ export default function RegistroForm() {
         />
        
       </div>
-      <div>
-        <label htmlFor="Address">Direccion del usuario: </label>
+      <div id='register'>
+        <label id='one' htmlFor="Address">Direccion del usuario: </label>
         <input
           type="text"
           id="Address"
@@ -173,7 +173,7 @@ export default function RegistroForm() {
       
       </div>
       <div>
-        <label htmlFor="Role">Rol del usuario: </label>
+        <label id='one' htmlFor="Role">Rol del usuario: </label>
         <select
   id="Role"
   name="Role"
@@ -187,7 +187,7 @@ export default function RegistroForm() {
 </select>
         <br/><br/>
       </div>
-      <button onClick={onRegistroClick}>Registrar</button>
+      <button id='registro_adm' onClick={onRegistroClick}>Registrar</button>
     </div>
   );
 }

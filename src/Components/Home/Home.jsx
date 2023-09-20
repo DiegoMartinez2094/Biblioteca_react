@@ -6,7 +6,6 @@ export default function Home() {
         <> 
         <Link to={"/registroAdm"} > <button>Registro</button></Link>
         <button>Ingreso</button> 
-       
         </>
   )
 }

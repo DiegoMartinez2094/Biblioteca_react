@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import Home from './Components/Home/Home.jsx'
 import RegistroForm from './Components/login/registro.jsx'
+import SignIn from './Components/Sign-in/Sign-in.jsx'
 
 const router =createBrowserRouter([
   {
@@ -13,6 +14,10 @@ const router =createBrowserRouter([
   {
     path:'/registroAdm',
     element: <RegistroForm/>
+  },
+  {
+    path:'/ingreso',
+    element: <SignIn/>
   }
 ])
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'
 
 import './registro.css';
 
@@ -187,7 +188,10 @@ export default function RegistroForm() {
 </select>
         <br/><br/>
       </div>
-      <button id='registro_adm' onClick={onRegistroClick}>Registrar</button>
+      <Link to={"/"} ><button id='registro_adm'>Inicio</button></Link>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <button id='registro_adm' onClick={onRegistroClick}>Registrar</button> 
+     
     </div>
   );
 }

@@ -3,35 +3,38 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
 }
 
-body{
+#container{
+  margin-top: 200px;
+  transform: scale(1.40);
+  margin-left: 40%;
+  max-width: 300px;
+  padding-left: 10px;
+  padding-right: 10px;
   background-color: #ffffff;
-  margin-top: 30px;
+  text-align: center; 
+  padding-top: 3px; 
+  border-radius: 10px;
 }
 
 #register {
-  max-width: 250px;
-  margin:1px auto;
   padding-left: 10px;
   padding-right: 10px;
-  background-color: #96bfd7;
-  border-radius: 30px;
-  text-align: center; 
-  padding-top: 3px; 
+  padding-top: 10px; 
 }
 
 
 #one {
+  
   text-align: center;
   font-weight: bold;
   margin-bottom: 1px; 
-  font-size: 10px;
+  font-size: 15px;
   margin-bottom: 5px;
 }
 
   #User_id,#User_name,#Password,#Email,#Phone, #Address, #Role{
   padding: 5px;
   margin-bottom: 5px;
-
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 100%;
@@ -41,12 +44,11 @@ body{
 
 #registro_adm {
   padding: 5px 10px;
-  background-color: #007bff;
+  background-color: #f2f3f5;
   color: #000000;
   border-color: black;
-  border-radius: 10px;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 20px;
   transition: background-color 0.5s ease;
   margin-bottom: 10px; 
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -54,5 +56,5 @@ body{
 
 
 #registro_adm:hover {
-  background-color: #f8f9fb;
+  background-color: #5162f5;
 }

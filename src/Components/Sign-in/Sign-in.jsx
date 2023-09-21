@@ -23,9 +23,10 @@ export default function SignIn() {
 
   return (
     <>
-     <div id='register'>
+     <div id='container'>
       <div id='register'>
         <label id='one' htmlFor="Password">Contraseña: </label>
+        <br/> <br/>
         <input
           type="password"
           id="Password"
@@ -36,6 +37,7 @@ export default function SignIn() {
       </div>
       <div id='register'>
         <label id='one' htmlFor="Email">Correo electrónico: </label>
+        <br/> <br/>
         <input 
           type="text"
           id="Email"
@@ -44,6 +46,7 @@ export default function SignIn() {
           value={Email}
         />
       </div>
+      <br/>
       <Link to={"/"} ><button id='registro_adm'>Inicio</button></Link>
       &nbsp;&nbsp;&nbsp;&nbsp;
       <button id='registro_adm' onClick={onRegistroClick}>Ingresar</button> 

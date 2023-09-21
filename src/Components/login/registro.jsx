@@ -109,7 +109,7 @@ export default function RegistroForm() {
   
 
   return (
-    <div id='register'>
+    <div id='container'>
         <div id='register'>
         <label id='one' htmlFor="User_id">Id del usuario: </label>
         <input

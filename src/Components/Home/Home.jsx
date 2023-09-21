@@ -1,13 +1,19 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import './Home.css'
 
 export default function Home() {
   return (
-        <> 
-        <Link to={"/registroAdm"}><button id='registro_adm'>Registro</button></Link>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <Link to={"/ingreso"}><button id='registro_adm'>Ingreso</button> </Link>
-     
-        </>
+    <>
+     <h1 id='title'>"BookGest”</h1>
+    <div id='divHome'>
+      <Link to={"/registroAdm"}>
+        <button className='btn' id='btnsHome'>Registro</button>
+      </Link>
+      <Link to={"/ingreso"}>
+        <button className='btn' id='btnsHome'>Ingreso</button>
+      </Link>
+    </div></>
+   
   )
 }

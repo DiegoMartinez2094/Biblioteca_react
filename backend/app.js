@@ -17,18 +17,38 @@ const config = JSON.parse(process.env.My_server);
   // Habilita CORS
   app.use(cors());
 
+  app.get("/api/obtenerUltimoUserId", async (req, res) => {
+    try {
+      // Buscar el último User_id registrado en la base de datos
+      const lastUser = await usuarios.findOne({}, { sort: { User_id: -1 } });
+      
+      // Si no se encuentra ningún usuario, responder con 0 como último User_id
+      if (!lastUser) {
+        return res.status(200).json({ lastUserId: 0 });
+      }
+  
+      // Responder con el último User_id encontrado
+      res.status(200).json({ lastUserId: lastUser.User_id });
+    } catch (error) {
+      // Manejar errores, si los hay
+      console.error("Error al obtener el último User_id:", error);
+      res.status(500).json({ message: "Error al obtener el último User_id" });
+    }
+  });
+  
+
   app.post('/api/registrar', async (req, res) => {
     try {
-      const { User_id, User_name, Password, Email, Phone, Address, Role } = req.body;
+      const {  User_id,User_name, Password, Email, Phone, Address,  } = req.body;
       
       const userData = {
-        User_id, 
+        User_id,
         User_name,
         Password,
         Email,
         Phone,
         Address,
-        Role,
+        Role:"usuario"
       };
     
       await usuarios.insertOne(userData);

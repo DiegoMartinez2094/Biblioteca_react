@@ -82,6 +82,35 @@ const config = JSON.parse(process.env.My_server);
       res.status(500).json({ message: 'Error al verificar correo electrónico app.js' });
     }
   });
+
+
+  app.post('/api/verificarEmailyContras', async (req, res) => {
+    try {
+      const { Email, Password } = req.body;
+  
+      // Buscar el usuario por correo electrónico en la base de datos
+      const existingUser = await usuarios.findOne({ Email });
+  
+      if (existingUser) {
+        // Comprobar la contraseña proporcionada con la contraseña almacenada
+        // (Asume que la contraseña se almacena de manera segura en la base de datos)
+        if (existingUser.Password === Password) {
+          res.status(200).json({ message: 'Autenticación exitosa' });
+        } else {
+          res.status(401).json({ message: 'Credenciales incorrectas' });
+        }
+      } else {
+        res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+    } catch (error) {
+      // Manejar errores, si los hay
+      console.error('Error al verificar correo electrónico y contraseña:', error);
+      res.status(500).json({ message: 'Error al verificar correo electrónico y contraseña' });
+    }
+  });
+  
+
+
   
 
   app.listen(config.port, config.hostname, () => {

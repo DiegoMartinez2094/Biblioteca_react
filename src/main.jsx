@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './Components/Home/Home.jsx'
 import RegistroForm from './Components/login/registro.jsx'
 import SignIn from './Components/Sign-in/Sign-in.jsx'
+import UserPag from './Components/UserPag/UserPag.jsx'
 
 const router =createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router =createBrowserRouter([
   {
     path:'/ingreso',
     element: <SignIn/>
+  },
+  {
+    path:'/userpag',
+    element: <UserPag/>
   }
 ])
 

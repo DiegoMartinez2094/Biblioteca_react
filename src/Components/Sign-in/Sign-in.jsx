@@ -67,10 +67,10 @@ export default function SignIn() {
   return (
     <>
       <div id="container">
-        <div id="register">
+        <div id="register" style={{ display: "flex", alignItems: "center" }}>
           <label id="one" htmlFor="Email">
             Correo electrónico:{" "}
-          </label>
+          </label>&nbsp;&nbsp;
           <br />
           <br />
           <input
@@ -81,10 +81,10 @@ export default function SignIn() {
             value={Email}
           />
         </div>
-        <div id="register">
+        <div id="register" style={{ display: "flex", alignItems: "center" }}>
           <label id="one" htmlFor="Password">
             Contraseña:{" "}
-          </label>
+          </label>&nbsp;&nbsp;
           <br />
           <br />
           <div style={{ display: "flex", alignItems: "center" }}>

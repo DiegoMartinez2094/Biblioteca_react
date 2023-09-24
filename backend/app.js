@@ -35,11 +35,10 @@ const config = JSON.parse(process.env.My_server);
       res.status(500).json({ message: "Error al obtener el último User_id" });
     }
   });
-  
-
+  //para registrar usuario
   app.post('/api/registrar', async (req, res) => {
     try {
-      const {  User_id,User_name, Password, Email, Phone, Address,  } = req.body;
+      const {  User_id,User_name, Password, Email, Phone, Address, Role  } = req.body;
       
       const userData = {
         User_id,
@@ -48,7 +47,7 @@ const config = JSON.parse(process.env.My_server);
         Email,
         Phone,
         Address,
-        Role:"usuario"
+        Role,
       };
     
       await usuarios.insertOne(userData);
@@ -61,7 +60,6 @@ const config = JSON.parse(process.env.My_server);
       res.status(500).json({ message: 'Error al registrar usuario app.js' });
     }
   });
-
   //para verificar correo ya registrado
   app.post('/api/verificarEmail', async (req, res) => {
     try {
@@ -85,7 +83,7 @@ const config = JSON.parse(process.env.My_server);
       res.status(500).json({ message: 'Error al verificar correo electrónico app.js' });
     }
   });
-
+  //verificarEmailYcontraseña antes del ingreso
   app.post('/api/verificarEmailyContras', async (req, res) => {
     try {
       const { Email, Password } = req.body;
@@ -119,8 +117,6 @@ const config = JSON.parse(process.env.My_server);
     }
   });
   
-
-
   app.listen(config.port, config.hostname, () => {
     console.log(`Servidor iniciado en http://${config.hostname}:${config.port}`);
   });

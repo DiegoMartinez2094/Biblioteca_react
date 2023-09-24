@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import './Sign-in.css'
+import "./Sign-in.css";
 
 export default function SignIn() {
   const [Password, setPassword] = useState("");
   const [Email, setEmail] = useState("");
-  const [redirect, setRedirect] = useState(false); // Variable de estado para controlar la redirección
+  const [redirectUserPag, setRedirectUserPag] = useState(false);
+  const [redirectAdmPag, setRedirectAdmPag] = useState(false);
+  // Variable de estado para controlar la redirección
   const [showPassword, setShowPassword] = useState(false); // Variable de estado para mostrar u ocultar la contraseña
 
   const onPasswordChange = (e) => {
@@ -28,7 +30,6 @@ export default function SignIn() {
     }
 
     try {
-      // Verificar si el correo electrónico y la contraseña ya están registrados
       const emailycontraseñaExistsResponse = await fetch(
         "http://127.10.10.10:5000/api/verificarEmailyContras",
         {
@@ -36,13 +37,22 @@ export default function SignIn() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ Email, Password }), // Envía ambos campos en un solo objeto JSON
+          body: JSON.stringify({ Email, Password }),
         }
       );
-
-      if (emailycontraseñaExistsResponse.status === 200) {
-        // Credenciales válidas
-        setRedirect(true); // Establecer la variable de redirección en true
+  
+      if (emailycontraseñaExistsResponse.ok) {
+        const responseData = await emailycontraseñaExistsResponse.json();
+        const userType = responseData.userType;
+  
+        if (userType === 'administrador') {
+          setRedirectAdmPag(true);
+        } else if (userType === 'trabajador') {
+          // Hacer algo para usuarios trabajadores
+        } else if (userType === 'usuario') {
+          setRedirectUserPag(true);
+        }
+        
         setEmail("");
         setPassword("");
       } else if (emailycontraseñaExistsResponse.status === 401) {
@@ -70,7 +80,8 @@ export default function SignIn() {
         <div id="register" style={{ display: "flex", alignItems: "center" }}>
           <label id="one" htmlFor="Email">
             Correo electrónico:{" "}
-          </label>&nbsp;&nbsp;
+          </label>
+          &nbsp;&nbsp;
           <br />
           <br />
           <input
@@ -84,7 +95,8 @@ export default function SignIn() {
         <div id="register" style={{ display: "flex", alignItems: "center" }}>
           <label id="one" htmlFor="Password">
             Contraseña:{" "}
-          </label>&nbsp;&nbsp;
+          </label>
+          &nbsp;&nbsp;
           <br />
           <br />
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -94,14 +106,23 @@ export default function SignIn() {
               name="Password"
               onChange={onPasswordChange}
               value={Password}
-            />&nbsp;&nbsp;
-            <button onClick={toggleShowPassword} id='showPassword'>
-  {showPassword ? (
-    <img src="../../../public/vista.png" id='ceja' alt="Ocultar contraseña" />
-  ) : (
-    <img src="../../../public/ceja.png" id='vista' alt="Mostrar contraseña" />
-  )}
-</button>
+            />
+            &nbsp;&nbsp;
+            <button onClick={toggleShowPassword} id="showPassword">
+              {showPassword ? (
+                <img
+                  src="../../../public/vista.png"
+                  id="ceja"
+                  alt="Ocultar contraseña"
+                />
+              ) : (
+                <img
+                  src="../../../public/ceja.png"
+                  id="vista"
+                  alt="Mostrar contraseña"
+                />
+              )}
+            </button>
           </div>
         </div>
         <br />
@@ -112,7 +133,8 @@ export default function SignIn() {
         <button id="registro_adm" onClick={onIngresoClick}>
           Ingresar
         </button>
-        {redirect && <Navigate to="/userpag" />} {/* Redirección condicional */}
+        {redirectAdmPag && <Navigate to="/admpag" />}
+        {redirectUserPag && <Navigate to="/userpag" />}
       </div>
     </>
   );

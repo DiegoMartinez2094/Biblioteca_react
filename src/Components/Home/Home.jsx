@@ -7,7 +7,7 @@ export default function Home() {
     <>
      <h1 id='title'>"BookGest”</h1>
     <div id='divHome'>
-      <Link to={"/registroAdm"}>
+      <Link to={"/registro"}>
         <button className='btn' id='btnsHome'>Registro</button>
       </Link>
       <Link to={"/ingreso"}>

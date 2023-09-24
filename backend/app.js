@@ -62,6 +62,7 @@ const config = JSON.parse(process.env.My_server);
     }
   });
 
+  //para verificar correo ya registrado
   app.post('/api/verificarEmail', async (req, res) => {
     try {
       const { Email } = req.body;
@@ -70,6 +71,8 @@ const config = JSON.parse(process.env.My_server);
       const existingUser = await usuarios.findOne({ Email });
   
       if (existingUser) {
+      
+        console.log(WhatsRole)
         // El correo electrónico ya está registrado
         res.status(200).json({ message: 'Correo electrónico ya registrado' });
       } else {
@@ -83,7 +86,6 @@ const config = JSON.parse(process.env.My_server);
     }
   });
 
-
   app.post('/api/verificarEmailyContras', async (req, res) => {
     try {
       const { Email, Password } = req.body;
@@ -92,9 +94,18 @@ const config = JSON.parse(process.env.My_server);
       const existingUser = await usuarios.findOne({ Email });
   
       if (existingUser) {
-        // (Asume que la contraseña se almacena de manera segura en la base de datos)
         if (existingUser.Password === Password) {
-          res.status(200).json({ message: 'Autenticación exitosa' });
+          let userType;
+          if (existingUser.Role === 'administrador') {
+            userType = 'administrador';
+          } else if (existingUser.Role === 'trabajador') {
+            userType = 'trabajador';
+          } else {
+            userType = 'usuario';
+          }
+  
+          // Enviar el tipo de usuario en la respuesta JSON
+          res.status(200).json({ userType });
         } else {
           res.status(401).json({ message: 'Correo o Contraseña incorrecta' });
         }
@@ -109,8 +120,6 @@ const config = JSON.parse(process.env.My_server);
   });
   
 
-
-  
 
   app.listen(config.port, config.hostname, () => {
     console.log(`Servidor iniciado en http://${config.hostname}:${config.port}`);

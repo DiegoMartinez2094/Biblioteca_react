@@ -40,6 +40,7 @@ db.createCollection("user", {
         Role: {
           bsonType: "string",
           description: "Role could be of string type and is required",
+          enum: ["administrador", "trabajador", "usuario"],
         },
       },
     },
@@ -66,7 +67,7 @@ db.user.insertMany([
     Role: "trabajador",
   },
   {
-    User_id: 2,
+    User_id: 3,
     User_name: "Martineli",
     Password: "123",
     Email: "Martineli@gmail.com",

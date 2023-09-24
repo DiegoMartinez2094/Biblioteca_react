@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom'
 
-import './registro.css';
+import '../login/registro.css';
 
 //["User_id", "User_name", "Password","Email","Phone","Address","Role"]
 
-export default function RegistroForm() {
+export default function RegistroFormAdm() {
   const[User_id, setUser_id]= useState('');
   const[User_name, setUser_name]= useState('')
   const [Password, setPassword] = useState('');

@@ -1,9 +1,39 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from '../src/Components/App.jsx'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+
+import Home from './Components/Home/Home.jsx'
+import RegistroForm from './Components/login/registro.jsx'
+import SignIn from './Components/Sign-in/Sign-in.jsx'
+import UserPag from './Components/UserPag/UserPag.jsx'
+import RegistroFormAdm from './Components/RegistroAdm/registroAdm.jsx'
+
+const router =createBrowserRouter([
+  {
+    path:'/',
+    element: <Home/>
+  },
+  {
+    path:'/registro',
+    element: <RegistroForm/>
+  },
+  {
+    path:'/ingreso',
+    element: <SignIn/>
+  },
+  {
+    path:'/userpag',
+    element: <UserPag/>
+  },
+  {
+    path:'/admpag',
+    element: <RegistroFormAdm/>
+  }
+])
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+  <RouterProvider router={router}/>
   </React.StrictMode>,
 )

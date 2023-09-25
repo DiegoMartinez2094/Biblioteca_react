@@ -1,0 +1,78 @@
+use("Borrow");
+db.createCollection("user", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: [
+        "User_id",
+        "User_name",
+        "Password",
+        "Email",
+        "Phone",
+        "Address",
+        "Role",
+      ],
+      properties: {
+        User_id: {
+          bsonType: "int",
+          description: "User_id could be of string type and is required",
+        },
+        User_name: {
+          bsonType: "string",
+          description: "User_name could be of string type and is required",
+        },
+        Password: {
+          bsonType: "string",
+          description: "Password could be of string type and is required",
+        },
+        Email: {
+          bsonType: "string",
+          description: "Email could be of string type and is required",
+        },
+        Phone: {
+          bsonType: "string",
+          description: "Phone could be of string type and is required",
+        },
+        Address: {
+          bsonType: "string",
+          description: "Address could be of string type and is required",
+        },
+        Role: {
+          bsonType: "string",
+          description: "Role could be of string type and is required",
+          enum: ["administrador", "trabajador", "usuario"],
+        },
+      },
+    },
+  },
+});
+
+db.user.insertMany([
+  {
+    User_id: 1,
+    User_name: "Diego",
+    Password: "123",
+    Email: "Diego@gmail.com",
+    Phone: "1234567890",
+    Address: "Dirección 1",
+    Role: "administrador",
+  },
+  {
+    User_id: 2,
+    User_name: "Fernando",
+    Password: "123",
+    Email: "Fernando@gmail.com",
+    Phone: "125454231564",
+    Address: "Dirección 2",
+    Role: "trabajador",
+  },
+  {
+    User_id: 3,
+    User_name: "Martineli",
+    Password: "123",
+    Email: "Martineli@gmail.com",
+    Phone: "125454231564",
+    Address: "Dirección 3",
+    Role: "usuario",
+  },
+]);

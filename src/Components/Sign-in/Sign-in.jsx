@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import "./Sign-in.css";
 
+
 export default function SignIn() {
+  const config = JSON.parse(import.meta.env.VITE_My_server);
+  
   const [Password, setPassword] = useState("");
   const [Email, setEmail] = useState("");
   const [redirectUserPag, setRedirectUserPag] = useState(false);
@@ -31,7 +34,7 @@ export default function SignIn() {
 
     try {
       const emailycontraseñaExistsResponse = await fetch(
-        "http://127.10.10.10:5000/api/verificarEmailyContras",
+        `http://${config.hostname}:${config.port}/api/verificarEmailyContras`,
         {
           method: "POST",
           headers: {
@@ -40,19 +43,19 @@ export default function SignIn() {
           body: JSON.stringify({ Email, Password }),
         }
       );
-  
+
       if (emailycontraseñaExistsResponse.ok) {
         const responseData = await emailycontraseñaExistsResponse.json();
         const userType = responseData.userType;
-  
-        if (userType === 'administrador') {
+
+        if (userType === "administrador") {
           setRedirectAdmPag(true);
-        } else if (userType === 'trabajador') {
+        } else if (userType === "trabajador") {
           // Hacer algo para usuarios trabajadores
-        } else if (userType === 'usuario') {
+        } else if (userType === "usuario") {
           setRedirectUserPag(true);
         }
-        
+
         setEmail("");
         setPassword("");
       } else if (emailycontraseñaExistsResponse.status === 401) {

@@ -6,6 +6,8 @@ import "../login/registro.css";
 //["User_id", "User_name", "Password","Email","Phone","Address","Role"]
 
 export default function RegistroForm() {
+  const config = JSON.parse(import.meta.env.VITE_My_server);
+  
   const [User_name, setUser_name] = useState("");
   const [Password, setPassword] = useState("");
   const [Email, setEmail] = useState("");
@@ -46,7 +48,7 @@ export default function RegistroForm() {
     try {
       // Verificar si el correo electrónico ya está registrado
       const emailExistsResponse = await fetch(
-        "http://127.10.10.10:5000/api/verificarEmail",
+        `http://${config.hostname}:${config.port}/api/verificarEmail`,
         {
           method: "POST",
           headers: {
@@ -63,7 +65,7 @@ export default function RegistroForm() {
       }
       // Obtener el último User_id registrado desde el servidor
       const lastUserIdResponse = await fetch(
-        "http://127.10.10.10:5000/api/obtenerUltimoUserId"
+        `http://${config.hostname}:${config.port}/api/obtenerUltimoUserId`
       );
 
       let newUser_id = 1; // Valor predeterminado en caso de que no haya registros
@@ -88,7 +90,7 @@ export default function RegistroForm() {
       };
 
       // Continuar con el registro
-      const response = await fetch("http://127.10.10.10:5000/api/registrar", {
+      const response = await fetch(`http://${config.hostname}:${config.port}/api/registrar`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

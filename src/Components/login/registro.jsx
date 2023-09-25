@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 
 import "./registro.css";
 
-//["User_id", "User_name", "Password","Email","Phone","Address","Role"]
-
 export default function RegistroForm() {
+
+  const config = JSON.parse(import.meta.env.VITE_My_server);
+
   const [User_name, setUser_name] = useState("");
   const [Password, setPassword] = useState("");
   const [Email, setEmail] = useState("");
@@ -42,7 +43,7 @@ export default function RegistroForm() {
     try {
       // Verificar si el correo electrónico ya está registrado
       const emailExistsResponse = await fetch(
-        "http://127.10.10.10:5000/api/verificarEmail",
+        `http://${config.hostname}:${config.port}/api/verificarEmail`,
         {
           method: "POST",
           headers: {
@@ -59,7 +60,7 @@ export default function RegistroForm() {
       }
       // Obtener el último User_id registrado desde el servidor
       const lastUserIdResponse = await fetch(
-        "http://127.10.10.10:5000/api/obtenerUltimoUserId"
+        `http://${config.hostname}:${config.port}/api/obtenerUltimoUserId`
       );
 
       let newUser_id = 1; // Valor predeterminado en caso de que no haya registros
@@ -84,13 +85,16 @@ export default function RegistroForm() {
       };
 
       // Continuar con el registro
-      const response = await fetch("http://127.10.10.10:5000/api/registrar", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await fetch(
+        `http://${config.hostname}:${config.port}/api/registrar`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
 
       if (response.status === 201) {
         alert("Usuario registrado correctamente");
@@ -119,10 +123,11 @@ export default function RegistroForm() {
 
   return (
     <div id="container">
-      <div id="register"  style={{ display: "flex", alignItems: "center" }}>
+      <div id="register" style={{ display: "flex", alignItems: "center" }}>
         <label id="one" htmlFor="User_name">
           Nombre:{" "}
-        </label>&nbsp;&nbsp;
+        </label>
+        &nbsp;&nbsp;
         <input
           type="text"
           id="User_name"
@@ -131,10 +136,11 @@ export default function RegistroForm() {
           value={User_name}
         />
       </div>
-      <div id="register"  style={{ display: "flex", alignItems: "center" }}>
+      <div id="register" style={{ display: "flex", alignItems: "center" }}>
         <label id="one" htmlFor="Password">
           Contraseña:{" "}
-        </label>&nbsp;&nbsp;
+        </label>
+        &nbsp;&nbsp;
         <input
           type={showPassword ? "text" : "password"} // Cambiar el tipo de entrada en función de showPassword
           id="Password"
@@ -159,10 +165,11 @@ export default function RegistroForm() {
           )}
         </button>
       </div>
-      <div id="register"  style={{ display: "flex", alignItems: "center" }}>
+      <div id="register" style={{ display: "flex", alignItems: "center" }}>
         <label id="one" htmlFor="Email">
           Correo electrónico:{" "}
-        </label>&nbsp;&nbsp;
+        </label>
+        &nbsp;&nbsp;
         <input
           type="text"
           id="Email"
@@ -171,10 +178,11 @@ export default function RegistroForm() {
           value={Email}
         />
       </div>
-      <div id="register"  style={{ display: "flex", alignItems: "center" }}>
+      <div id="register" style={{ display: "flex", alignItems: "center" }}>
         <label id="one" htmlFor="Phone">
           Telefono:{" "}
-        </label>&nbsp;&nbsp;
+        </label>
+        &nbsp;&nbsp;
         <input
           type="text"
           id="Phone"
@@ -183,10 +191,11 @@ export default function RegistroForm() {
           value={Phone}
         />
       </div>
-      <div id="register"  style={{ display: "flex", alignItems: "center" }}>
+      <div id="register" style={{ display: "flex", alignItems: "center" }}>
         <label id="one" htmlFor="Address">
           Direccion:{" "}
-        </label>&nbsp;&nbsp;
+        </label>
+        &nbsp;&nbsp;
         <input
           type="text"
           id="Address"

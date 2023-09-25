@@ -6,7 +6,8 @@ import cors from 'cors'; // Importa el middleware CORS
 dotenv.config();
 
 const app = express();
-const config = JSON.parse(process.env.My_server);
+const config = JSON.parse(process.env.VITE_My_server);
+export default config;
 
 (async () => {
   const db = await con();
@@ -118,6 +119,7 @@ const config = JSON.parse(process.env.My_server);
   });
   
   app.listen(config.port, config.hostname, () => {
+
     console.log(`Servidor iniciado en http://${config.hostname}:${config.port}`);
   });
 })();

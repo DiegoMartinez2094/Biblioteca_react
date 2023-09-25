@@ -44,6 +44,12 @@ export default function RegistroForm() {
       alert("Por favor, complete todos los campos.");
       return;
     }
+    
+    if ( Email.indexOf('@') === -1 || Email.indexOf('.') === -1) {
+      // Validar que el campo de correo electrónico contenga al menos una "@" y al menos un "."
+      alert("Por favor, ingrese un correo electrónico válido.");
+      return;
+    }
 
     try {
       // Verificar si el correo electrónico ya está registrado

@@ -139,6 +139,28 @@ export default config;
     }
   });
 
+  app.delete("/api/eliminarUsuarioPorEmail", async (req, res) => {
+    try {
+      const { Email } = req.query; // Obtén el correo electrónico desde la consulta
+  
+      // Elimina el usuario de la colección 'usuarios' por correo electrónico
+      const result = await usuarios.deleteOne({ Email: Email });
+  
+      if (result.deletedCount > 0) {
+        // Si se eliminó el usuario, responde con un mensaje de éxito
+        res.status(200).json({ message: 'Usuario eliminado correctamente' });
+      } else {
+        // Si no se encontró el usuario, responde con un mensaje de error
+        res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+    } catch (error) {
+      // Maneja los errores, si los hay
+      console.error("Error al eliminar el usuario por correo electrónico:", error);
+      res.status(500).json({ message: "Error al eliminar el usuario por correo electrónico" });
+    }
+  });
+  
+
   app.listen(config.port, config.hostname, () => {
 
     console.log(`Servidor iniciado en http://${config.hostname}:${config.port}`);

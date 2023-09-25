@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import '../login/registro.css';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import "../login/registro.css";
+
 
 export default function RegistroForm() {
   const config = JSON.parse(import.meta.env.VITE_My_server);
 
-  const [User_name, setUser_name] = useState('');
-  const [Password, setPassword] = useState('');
-  const [Email, setEmail] = useState('');
-  const [Phone, setPhone] = useState('');
-  const [Address, setAddress] = useState('');
-  const [Role, setRole] = useState('');
+  const [User_name, setUser_name] = useState("");
+  const [Password, setPassword] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Phone, setPhone] = useState("");
+  const [Address, setAddress] = useState("");
+  const [Role, setRole] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [foundUser, setFoundUser] = useState(null);
 
@@ -37,17 +38,16 @@ export default function RegistroForm() {
   };
 
   useEffect(() => {
-    // Cargar los campos de entrada cuando foundUser se actualice
-    loadUserFields();
+    loadUserFields();// Cargar los campos de entrada cuando foundUser se actualice
   }, [foundUser]);
 
   const loadUserFields = () => {
-    setUser_name(foundUser ? foundUser.User_name : '');
-    setPassword(foundUser ? foundUser.Password : '');
-    setEmail(foundUser ? foundUser.Email : '');
-    setPhone(foundUser ? foundUser.Phone : '');
-    setAddress(foundUser ? foundUser.Address : '');
-    setRole(foundUser ? foundUser.Role : '');
+    setUser_name(foundUser ? foundUser.User_name : "");
+    setPassword(foundUser ? foundUser.Password : "");
+    setEmail(foundUser ? foundUser.Email : "");
+    setPhone(foundUser ? foundUser.Phone : "");
+    setAddress(foundUser ? foundUser.Address : "");
+    setRole(foundUser ? foundUser.Role : "");
   };
 
   const onRegistroClick = async () => {
@@ -56,8 +56,8 @@ export default function RegistroForm() {
       alert("Por favor, complete todos los campos.");
       return;
     }
-    
-    if ( Email.indexOf('@') === -1 || Email.indexOf('.') === -1) {
+
+    if (Email.indexOf("@") === -1 || Email.indexOf(".") === -1) {
       // Validar que el campo de correo electrónico contenga al menos una "@" y al menos un "."
       alert("Por favor, ingrese un correo electrónico válido.");
       return;
@@ -108,13 +108,16 @@ export default function RegistroForm() {
       };
 
       // Continuar con el registro
-      const response = await fetch(`http://${config.hostname}:${config.port}/api/registrar`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await fetch(
+        `http://${config.hostname}:${config.port}/api/registrar`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
 
       if (response.status === 201) {
         alert("Usuario registrado correctamente");
@@ -141,19 +144,18 @@ export default function RegistroForm() {
     }
   };
 
-
   const onSearchUserClick = async () => {
     if (!Email) {
-      alert('Por favor, ingrese un Correo electrónico');
+      alert("Por favor, ingrese un Correo electrónico");
       return;
     }
     try {
       const emailExistsResponse = await fetch(
         `http://${config.hostname}:${config.port}/api/verificarEmail`,
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ Email }),
         }
@@ -163,9 +165,9 @@ export default function RegistroForm() {
         const userDataResponse = await fetch(
           `http://${config.hostname}:${config.port}/api/obtenerUsuarioPorEmail?Email=${Email}`,
           {
-            method: 'GET',
+            method: "GET",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
           }
         );
@@ -175,19 +177,66 @@ export default function RegistroForm() {
           setFoundUser(userData);
         }
       } else {
-        alert('Correo electrónico no encontrado');
+        alert("Correo electrónico no encontrado");
         setFoundUser(null);
       }
     } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
+      console.error("Error al realizar la solicitud:", error);
     }
   };
 
+  const onDeleteUserClick = async () => {
+    if (!Email) {
+      alert("Por favor, ingrese un Correo electrónico");
+      return;
+    }
+    try {
+      const emailExistsResponse = await fetch(
+        `http://${config.hostname}:${config.port}/api/verificarEmail`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ Email }),
+        }
+      );
+  
+      if (emailExistsResponse.status === 200) {
+        const userDataDelete = await fetch(
+          `http://${config.hostname}:${config.port}/api/eliminarUsuarioPorEmail?Email=${Email}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+  
+        if (userDataDelete.status === 200) {
+          alert("Usuario eliminado exitosamente");
+          setUser_name("");
+          setEmail("");
+          setPassword("");
+          setPhone("");
+          setAddress("");
+          setRole("");
+        } else {
+          alert("Correo electrónico no encontrado");
+          setFoundUser(null);
+        }
+      }
+    } catch (error) {
+      console.error("Error al realizar la solicitud:", error);
+    }
+  };
+  
+
   return (
     <div id="container">
-      <div id="register" style={{ display: 'flex', alignItems: 'center' }}>
+      <div id="register" style={{ display: "flex", alignItems: "center" }}>
         <label id="one" htmlFor="User_name">
-          Nombre:{' '}
+          Nombre:{" "}
         </label>
         &nbsp;&nbsp;
         <input
@@ -198,13 +247,13 @@ export default function RegistroForm() {
           value={User_name}
         />
       </div>
-      <div id="register" style={{ display: 'flex', alignItems: 'center' }}>
+      <div id="register" style={{ display: "flex", alignItems: "center" }}>
         <label id="one" htmlFor="Password">
-          Contraseña:{' '}
+          Contraseña:{" "}
         </label>
         &nbsp;&nbsp;
         <input
-          type={showPassword ? 'text' : 'password'}
+          type={showPassword ? "text" : "password"}
           id="Password"
           name="Password"
           onChange={onPasswordChange}
@@ -227,9 +276,9 @@ export default function RegistroForm() {
           )}
         </button>
       </div>
-      <div id="register" style={{ display: 'flex', alignItems: 'center' }}>
+      <div id="register" style={{ display: "flex", alignItems: "center" }}>
         <label id="one" htmlFor="Email">
-          Correo electrónico:{' '}
+          Correo electrónico:{" "}
         </label>
         &nbsp;&nbsp;
         <input
@@ -240,9 +289,9 @@ export default function RegistroForm() {
           value={Email}
         />
       </div>
-      <div id="register" style={{ display: 'flex', alignItems: 'center' }}>
+      <div id="register" style={{ display: "flex", alignItems: "center" }}>
         <label id="one" htmlFor="Phone">
-          Telefono:{' '}
+          Telefono:{" "}
         </label>
         &nbsp;&nbsp;
         <input
@@ -253,9 +302,9 @@ export default function RegistroForm() {
           value={Phone}
         />
       </div>
-      <div id="register" style={{ display: 'flex', alignItems: 'center' }}>
+      <div id="register" style={{ display: "flex", alignItems: "center" }}>
         <label id="one" htmlFor="Address">
-          Direccion:{' '}
+          Direccion:{" "}
         </label>
         &nbsp;&nbsp;
         <input
@@ -266,17 +315,12 @@ export default function RegistroForm() {
           value={Address}
         />
       </div>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div style={{ display: "flex", alignItems: "center" }}>
         <label id="one" htmlFor="Role">
-          Rol del usuario:{' '}
+          Rol del usuario:{" "}
         </label>
         &nbsp;&nbsp;
-        <select
-          id="Role"
-          name="Role"
-          onChange={onRoleChange}
-          value={Role}
-        >
+        <select id="Role" name="Role" onChange={onRoleChange} value={Role}>
           <option value="">Seleccione el rol</option>
           <option value="administrador">Administrador</option>
           <option value="trabajador">Trabajador</option>
@@ -285,16 +329,20 @@ export default function RegistroForm() {
         <br />
         <br />
       </div>
-      <Link to={'/'}>
+      <Link to={"/"}>
         <button id="registro_adm">Inicio</button>
       </Link>
       &nbsp;&nbsp;&nbsp;&nbsp;
       <button id="registro_adm" onClick={onRegistroClick}>
         Registrar usuario
-      </button>{' '}
+      </button>{" "}
       &nbsp;&nbsp;&nbsp;&nbsp;
       <button id="registro_adm" onClick={onSearchUserClick}>
         Buscar usuario
+      </button>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <button id="registro_adm" onClick={onDeleteUserClick}>
+        Eliminar usuario
       </button>
     </div>
   );

@@ -71,7 +71,7 @@ export default config;
   
       if (existingUser) {
       
-        console.log(WhatsRole)
+        // console.log(WhatsRole)
         // El correo electrónico ya está registrado
         res.status(200).json({ message: 'Correo electrónico ya registrado' });
       } else {
@@ -118,6 +118,27 @@ export default config;
     }
   });
   
+  app.get("/api/obtenerUsuarioPorEmail", async (req, res) => {
+    try {
+      const { Email } = req.query; // Obtén el correo electrónico desde la consulta
+  
+      // Busca el usuario en la colección 'user' por correo electrónico
+      const user = await usuarios.findOne({ Email: Email });
+  
+      if (user) {
+        // Si se encuentra el usuario, responde con los datos del usuario
+        res.status(200).json(user);
+      } else {
+        // Si no se encuentra el usuario, responde con un mensaje de error
+        res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+    } catch (error) {
+      // Maneja los errores, si los hay
+      console.error("Error al obtener el usuario por correo electrónico:", error);
+      res.status(500).json({ message: "Error al obtener el usuario por correo electrónico" });
+    }
+  });
+
   app.listen(config.port, config.hostname, () => {
 
     console.log(`Servidor iniciado en http://${config.hostname}:${config.port}`);

@@ -1,20 +1,18 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-
-import "../login/registro.css";
-
-//["User_id", "User_name", "Password","Email","Phone","Address","Role"]
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import '../login/registro.css';
 
 export default function RegistroForm() {
   const config = JSON.parse(import.meta.env.VITE_My_server);
-  
-  const [User_name, setUser_name] = useState("");
-  const [Password, setPassword] = useState("");
-  const [Email, setEmail] = useState("");
-  const [Phone, setPhone] = useState("");
-  const [Address, setAddress] = useState("");
-  const [Role, setRole] = useState("");
+
+  const [User_name, setUser_name] = useState('');
+  const [Password, setPassword] = useState('');
+  const [Email, setEmail] = useState('');
+  const [Phone, setPhone] = useState('');
+  const [Address, setAddress] = useState('');
+  const [Role, setRole] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [foundUser, setFoundUser] = useState(null);
 
   const onUser_nameChange = (e) => {
     setUser_name(e.target.value);
@@ -36,6 +34,20 @@ export default function RegistroForm() {
   };
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
+  };
+
+  useEffect(() => {
+    // Cargar los campos de entrada cuando foundUser se actualice
+    loadUserFields();
+  }, [foundUser]);
+
+  const loadUserFields = () => {
+    setUser_name(foundUser ? foundUser.User_name : '');
+    setPassword(foundUser ? foundUser.Password : '');
+    setEmail(foundUser ? foundUser.Email : '');
+    setPhone(foundUser ? foundUser.Phone : '');
+    setAddress(foundUser ? foundUser.Address : '');
+    setRole(foundUser ? foundUser.Role : '');
   };
 
   const onRegistroClick = async () => {
@@ -129,11 +141,53 @@ export default function RegistroForm() {
     }
   };
 
+
+  const onSearchUserClick = async () => {
+    if (!Email) {
+      alert('Por favor, ingrese un Correo electrónico');
+      return;
+    }
+    try {
+      const emailExistsResponse = await fetch(
+        `http://${config.hostname}:${config.port}/api/verificarEmail`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ Email }),
+        }
+      );
+
+      if (emailExistsResponse.status === 200) {
+        const userDataResponse = await fetch(
+          `http://${config.hostname}:${config.port}/api/obtenerUsuarioPorEmail?Email=${Email}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (userDataResponse.status === 200) {
+          const userData = await userDataResponse.json();
+          setFoundUser(userData);
+        }
+      } else {
+        alert('Correo electrónico no encontrado');
+        setFoundUser(null);
+      }
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
+    }
+  };
+
   return (
     <div id="container">
-      <div id="register" style={{ display: "flex", alignItems: "center" }}>
+      <div id="register" style={{ display: 'flex', alignItems: 'center' }}>
         <label id="one" htmlFor="User_name">
-          Nombre:{" "}
+          Nombre:{' '}
         </label>
         &nbsp;&nbsp;
         <input
@@ -144,13 +198,13 @@ export default function RegistroForm() {
           value={User_name}
         />
       </div>
-      <div id="register" style={{ display: "flex", alignItems: "center" }}>
+      <div id="register" style={{ display: 'flex', alignItems: 'center' }}>
         <label id="one" htmlFor="Password">
-          Contraseña:{" "}
+          Contraseña:{' '}
         </label>
         &nbsp;&nbsp;
         <input
-          type={showPassword ? "text" : "password"} // Cambiar el tipo de entrada en función de showPassword
+          type={showPassword ? 'text' : 'password'}
           id="Password"
           name="Password"
           onChange={onPasswordChange}
@@ -173,9 +227,9 @@ export default function RegistroForm() {
           )}
         </button>
       </div>
-      <div id="register" style={{ display: "flex", alignItems: "center" }}>
+      <div id="register" style={{ display: 'flex', alignItems: 'center' }}>
         <label id="one" htmlFor="Email">
-          Correo electrónico:{" "}
+          Correo electrónico:{' '}
         </label>
         &nbsp;&nbsp;
         <input
@@ -186,9 +240,9 @@ export default function RegistroForm() {
           value={Email}
         />
       </div>
-      <div id="register" style={{ display: "flex", alignItems: "center" }}>
+      <div id="register" style={{ display: 'flex', alignItems: 'center' }}>
         <label id="one" htmlFor="Phone">
-          Telefono:{" "}
+          Telefono:{' '}
         </label>
         &nbsp;&nbsp;
         <input
@@ -199,9 +253,9 @@ export default function RegistroForm() {
           value={Phone}
         />
       </div>
-      <div id="register" style={{ display: "flex", alignItems: "center" }}>
+      <div id="register" style={{ display: 'flex', alignItems: 'center' }}>
         <label id="one" htmlFor="Address">
-          Direccion:{" "}
+          Direccion:{' '}
         </label>
         &nbsp;&nbsp;
         <input
@@ -212,12 +266,17 @@ export default function RegistroForm() {
           value={Address}
         />
       </div>
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
         <label id="one" htmlFor="Role">
-          Rol del usuario:{" "}
+          Rol del usuario:{' '}
         </label>
         &nbsp;&nbsp;
-        <select id="Role" name="Role" onChange={onRoleChange} value={Role}>
+        <select
+          id="Role"
+          name="Role"
+          onChange={onRoleChange}
+          value={Role}
+        >
           <option value="">Seleccione el rol</option>
           <option value="administrador">Administrador</option>
           <option value="trabajador">Trabajador</option>
@@ -226,12 +285,16 @@ export default function RegistroForm() {
         <br />
         <br />
       </div>
-      <Link to={"/"}>
+      <Link to={'/'}>
         <button id="registro_adm">Inicio</button>
       </Link>
       &nbsp;&nbsp;&nbsp;&nbsp;
       <button id="registro_adm" onClick={onRegistroClick}>
-        Registrar
+        Registrar usuario
+      </button>{' '}
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <button id="registro_adm" onClick={onSearchUserClick}>
+        Buscar usuario
       </button>
     </div>
   );

@@ -211,9 +211,9 @@ export default function RegistroForm() {
         />
       </div>
       <Link to={"/"}>
-        <button id="registro_adm">Inicio</button>
+        <button id="btn-atras" >←</button>
       </Link>
-      &nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <button id="registro_adm" onClick={onRegistroClick}>
         Registrar
       </button>

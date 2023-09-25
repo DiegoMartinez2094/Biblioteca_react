@@ -329,21 +329,26 @@ export default function RegistroForm() {
         <br />
         <br />
       </div>
-      <Link to={"/"}>
-        <button id="registro_adm">Inicio</button>
-      </Link>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <button id="registro_adm" onClick={onRegistroClick}>
+      
+  
+      <button id="registro_adm"  onClick={onRegistroClick}>
         Registrar usuario
-      </button>{" "}
-      &nbsp;&nbsp;&nbsp;&nbsp;
+      </button>
+      
       <button id="registro_adm" onClick={onSearchUserClick}>
         Buscar usuario
       </button>
-      &nbsp;&nbsp;&nbsp;&nbsp;
+      
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+      <Link to={"/"}>
+        <button id="btn-atras2">←</button>
+      </Link> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
       <button id="registro_adm" onClick={onDeleteUserClick}>
         Eliminar usuario
       </button>
-    </div>
+ </div>
+    
   );
 }

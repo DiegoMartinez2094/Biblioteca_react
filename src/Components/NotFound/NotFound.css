@@ -1,0 +1,22 @@
+#btnInicio {
+    padding: 5px 10px;
+    background-color: #f2f3f5;
+    color: #000000;
+    border: 5px solid black; /* Agrega esta línea para establecer el borde en negro */
+    cursor: pointer;
+    font-size: 3rem;
+    transition: background-color 0.5s ease;
+    margin-bottom: 10px;
+    width: 15Rem;
+    border-radius: 30%;
+    margin-left: 23rem;
+}
+
+#btnInicio:hover {
+    background-color: #f5bc51;
+   
+}
+
+#IMGerror404{
+    width: 1000px;
+}

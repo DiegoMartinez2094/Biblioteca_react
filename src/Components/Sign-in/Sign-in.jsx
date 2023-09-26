@@ -10,6 +10,7 @@ export default function SignIn() {
   const [Email, setEmail] = useState("");
   const [redirectUserPag, setRedirectUserPag] = useState(false);
   const [redirectAdmPag, setRedirectAdmPag] = useState(false);
+  const [redirectWorkerPag , setRedirectWorkerPag] = useState(false);
   // Variable de estado para controlar la redirección
   const [showPassword, setShowPassword] = useState(false); // Variable de estado para mostrar u ocultar la contraseña
 
@@ -51,7 +52,7 @@ export default function SignIn() {
         if (userType === "administrador") {
           setRedirectAdmPag(true);
         } else if (userType === "trabajador") {
-          // Hacer algo para usuarios trabajadores
+           setRedirectWorkerPag(true);
         } else if (userType === "usuario") {
           setRedirectUserPag(true);
         }
@@ -138,6 +139,7 @@ export default function SignIn() {
         </button>
         {redirectAdmPag && <Navigate to="/admpag" />}
         {redirectUserPag && <Navigate to="/userpag" />}
+        {redirectWorkerPag && <Navigate to="/Workerpag" />}
       </div>
     </>
   );

@@ -8,6 +8,7 @@ import SignIn from './Components/Sign-in/Sign-in.jsx'
 import UserPag from './Components/UserPag/UserPag.jsx'
 import RegistroFormAdm from './Components/RegistroAdm/registroAdm.jsx'
 import NotFound from './Components/NotFound/NotFound.jsx'
+import WorkerPag from './Components/WorkerPag/WorkerPag.jsx'
 
 const router =createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router =createBrowserRouter([
   {
     path: '*',
     element: <NotFound/>,
+  },
+  {
+    path: '/WorkerPag',
+    element: <WorkerPag/>,
   },
 ])
 

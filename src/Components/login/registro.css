@@ -54,7 +54,57 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
+#btn-atras {
+  padding: 5px;
+  background-color: #f2f3f5;
+  color: #000000;
+  border-color: black;
+  cursor: pointer;
+  font-size: 20px;
+  transition: background-color 0.5s ease;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  margin-left: -90px;
+  border-radius: 40%;
+
+   }
+   #btn-atras2 {
+    padding: 5px;
+    background-color: #f2f3f5;
+    color: #000000;
+    border-color: black;
+    cursor: pointer;
+    font-size: 20px;
+    transition: background-color 0.5s ease;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    margin-left: -70px;
+    border-radius: 40%;
+  
+     }
+
+  #btnUpdate{
+    padding: 5px 10px;
+    background-color: #f2f3f5;
+    color: #000000;
+    border-color: black;
+    cursor: pointer;
+    font-size: 20px;
+    transition: background-color 0.5s ease;
+    margin-bottom: 10px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    margin-left: 70px;
+  }
+
+ #btnUpdate:hover {
+    background-color: #5162f5;
+}
 
 #registro_adm:hover {
   background-color: #5162f5;
 }
+ #btn-atras:hover {
+  background-color: #5162f5;
+}
+ #btn-atras2:hover {
+  background-color: #5162f5;
+}
+

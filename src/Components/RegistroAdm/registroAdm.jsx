@@ -1,13 +1,10 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
 import "../login/registro.css";
-
-//["User_id", "User_name", "Password","Email","Phone","Address","Role"]
 
 export default function RegistroForm() {
   const config = JSON.parse(import.meta.env.VITE_My_server);
-  
+
   const [User_name, setUser_name] = useState("");
   const [Password, setPassword] = useState("");
   const [Email, setEmail] = useState("");
@@ -15,6 +12,7 @@ export default function RegistroForm() {
   const [Address, setAddress] = useState("");
   const [Role, setRole] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [foundUser, setFoundUser] = useState(null);
 
   const onUser_nameChange = (e) => {
     setUser_name(e.target.value);
@@ -38,14 +36,27 @@ export default function RegistroForm() {
     setShowPassword(!showPassword);
   };
 
+  useEffect(() => {
+    loadUserFields(); // Cargar los campos de entrada cuando foundUser se actualice
+  }, [foundUser]);
+
+  const loadUserFields = () => {
+    setUser_name(foundUser ? foundUser.User_name : "");
+    setPassword(foundUser ? foundUser.Password : "");
+    setEmail(foundUser ? foundUser.Email : "");
+    setPhone(foundUser ? foundUser.Phone : "");
+    setAddress(foundUser ? foundUser.Address : "");
+    setRole(foundUser ? foundUser.Role : "");
+  };
+
   const onRegistroClick = async () => {
     if (!User_name || !Password || !Email || !Phone || !Address) {
       // Validar que todos los campos estén llenos
       alert("Por favor, complete todos los campos.");
       return;
     }
-    
-    if ( Email.indexOf('@') === -1 || Email.indexOf('.') === -1) {
+
+    if (Email.indexOf("@") === -1 || Email.indexOf(".") === -1) {
       // Validar que el campo de correo electrónico contenga al menos una "@" y al menos un "."
       alert("Por favor, ingrese un correo electrónico válido.");
       return;
@@ -96,13 +107,16 @@ export default function RegistroForm() {
       };
 
       // Continuar con el registro
-      const response = await fetch(`http://${config.hostname}:${config.port}/api/registrar`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await fetch(
+        `http://${config.hostname}:${config.port}/api/registrar`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
 
       if (response.status === 201) {
         alert("Usuario registrado correctamente");
@@ -129,6 +143,155 @@ export default function RegistroForm() {
     }
   };
 
+  const onSearchUserClick = async () => {
+    if (!Email) {
+      alert("Por favor, ingrese un Correo electrónico");
+      return;
+    }
+    try {
+      const emailExistsResponse = await fetch(
+        `http://${config.hostname}:${config.port}/api/verificarEmail`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ Email }),
+        }
+      );
+
+      if (emailExistsResponse.status === 200) {
+        const userDataResponse = await fetch(
+          `http://${config.hostname}:${config.port}/api/obtenerUsuarioPorEmail?Email=${Email}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (userDataResponse.status === 200) {
+          const userData = await userDataResponse.json();
+          setFoundUser(userData);
+        }
+      } else {
+        alert("Correo electrónico no encontrado");
+        setFoundUser(null);
+      }
+    } catch (error) {
+      console.error("Error al realizar la solicitud:", error);
+    }
+  };
+
+  const onDeleteUserClick = async () => {
+    if (!Email) {
+      alert("Por favor, ingrese un Correo electrónico");
+      return;
+    }
+    try {
+      const emailExistsResponse = await fetch(
+        `http://${config.hostname}:${config.port}/api/verificarEmail`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ Email }),
+        }
+      );
+
+      if (emailExistsResponse.status === 200) {
+        const userDataDelete = await fetch(
+          `http://${config.hostname}:${config.port}/api/eliminarUsuarioPorEmail?Email=${Email}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (userDataDelete.status === 200) {
+          alert("Usuario eliminado exitosamente");
+          setUser_name("");
+          setEmail("");
+          setPassword("");
+          setPhone("");
+          setAddress("");
+          setRole("");
+        } else {
+          alert("Correo electrónico no encontrado");
+          setFoundUser(null);
+        }
+      }
+    } catch (error) {
+      console.error("Error al realizar la solicitud:", error);
+    }
+  };
+
+  const onUpdateUserClick = async () => {
+    if (!User_name || !Password || !Email || !Phone || !Address) {
+      // Validar que todos los campos estén llenos
+      alert("Por favor, complete todos los campos.");
+      return;
+    }
+    if (Email.indexOf("@") === -1 || Email.indexOf(".") === -1) {
+      // Validar que el campo de correo electrónico contenga al menos una "@" y al menos un "."
+      alert("Por favor, ingrese un correo electrónico válido.");
+      return;
+    }
+    try {
+      const emailExistsResponse = await fetch(
+        `http://${config.hostname}:${config.port}/api/verificarEmail`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ Email }),
+        }
+      );
+
+      if (emailExistsResponse.status === 200) {
+        const userDataUpdate = await fetch(
+          `http://${config.hostname}:${config.port}/api/editarUsuarioPorEmail?Email=${Email}`,
+          {
+            method: "PUT", // Cambia "UPDATE" a "PUT" para indicar que es una solicitud de actualización
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              User_name,
+              Password,
+              Email,
+              Phone,
+              Address,
+              Role,
+            }),
+          }
+        );
+
+        if (userDataUpdate.status === 200) {
+          alert("Usuario editado exitosamente");
+          setUser_name("");
+          setEmail("");
+          setPassword("");
+          setPhone("");
+          setAddress("");
+          setRole("");
+        } else {
+          alert("Correo electrónico no encontrado");
+          setFoundUser(null);
+        }
+      }
+    } catch (error) {
+      console.error("Error al realizar la solicitud:", error);
+    }
+  };
+
+
+
   return (
     <div id="container">
       <div id="register" style={{ display: "flex", alignItems: "center" }}>
@@ -150,7 +313,7 @@ export default function RegistroForm() {
         </label>
         &nbsp;&nbsp;
         <input
-          type={showPassword ? "text" : "password"} // Cambiar el tipo de entrada en función de showPassword
+          type={showPassword ? "text" : "password"}
           id="Password"
           name="Password"
           onChange={onPasswordChange}
@@ -225,13 +388,26 @@ export default function RegistroForm() {
         </select>
         <br />
         <br />
+        
       </div>
-      <Link to={"/"}>
-        <button id="registro_adm">Inicio</button>
-      </Link>
-      &nbsp;&nbsp;&nbsp;&nbsp;
+      <h4>Buscar o eliminar usuario por el correo</h4>&nbsp;&nbsp;&nbsp; &nbsp;
       <button id="registro_adm" onClick={onRegistroClick}>
-        Registrar
+        Registrar usuario
+      </button>
+      <button id="registro_adm" onClick={onSearchUserClick}>
+        Buscar usuario
+      </button>
+      <button id="btnUpdate" onClick={onUpdateUserClick}>
+        Editar usuario
+      </button>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
+      <Link to={"/"}>
+        <button id="btn-atras2">←</button>
+      </Link>{" "}
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+      <button id="registro_adm" onClick={onDeleteUserClick}>
+        Eliminar usuario
       </button>
     </div>
   );

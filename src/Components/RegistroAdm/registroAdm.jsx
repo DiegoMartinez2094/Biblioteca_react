@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../login/registro.css";
 
-
 export default function RegistroForm() {
   const config = JSON.parse(import.meta.env.VITE_My_server);
 
@@ -38,7 +37,7 @@ export default function RegistroForm() {
   };
 
   useEffect(() => {
-    loadUserFields();// Cargar los campos de entrada cuando foundUser se actualice
+    loadUserFields(); // Cargar los campos de entrada cuando foundUser se actualice
   }, [foundUser]);
 
   const loadUserFields = () => {
@@ -201,7 +200,7 @@ export default function RegistroForm() {
           body: JSON.stringify({ Email }),
         }
       );
-  
+
       if (emailExistsResponse.status === 200) {
         const userDataDelete = await fetch(
           `http://${config.hostname}:${config.port}/api/eliminarUsuarioPorEmail?Email=${Email}`,
@@ -212,7 +211,7 @@ export default function RegistroForm() {
             },
           }
         );
-  
+
         if (userDataDelete.status === 200) {
           alert("Usuario eliminado exitosamente");
           setUser_name("");
@@ -230,7 +229,68 @@ export default function RegistroForm() {
       console.error("Error al realizar la solicitud:", error);
     }
   };
-  
+
+  const onUpdateUserClick = async () => {
+    if (!User_name || !Password || !Email || !Phone || !Address) {
+      // Validar que todos los campos estén llenos
+      alert("Por favor, complete todos los campos.");
+      return;
+    }
+    if (Email.indexOf("@") === -1 || Email.indexOf(".") === -1) {
+      // Validar que el campo de correo electrónico contenga al menos una "@" y al menos un "."
+      alert("Por favor, ingrese un correo electrónico válido.");
+      return;
+    }
+    try {
+      const emailExistsResponse = await fetch(
+        `http://${config.hostname}:${config.port}/api/verificarEmail`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ Email }),
+        }
+      );
+
+      if (emailExistsResponse.status === 200) {
+        const userDataUpdate = await fetch(
+          `http://${config.hostname}:${config.port}/api/editarUsuarioPorEmail?Email=${Email}`,
+          {
+            method: "PUT", // Cambia "UPDATE" a "PUT" para indicar que es una solicitud de actualización
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              User_name,
+              Password,
+              Email,
+              Phone,
+              Address,
+              Role,
+            }),
+          }
+        );
+
+        if (userDataUpdate.status === 200) {
+          alert("Usuario editado exitosamente");
+          setUser_name("");
+          setEmail("");
+          setPassword("");
+          setPhone("");
+          setAddress("");
+          setRole("");
+        } else {
+          alert("Correo electrónico no encontrado");
+          setFoundUser(null);
+        }
+      }
+    } catch (error) {
+      console.error("Error al realizar la solicitud:", error);
+    }
+  };
+
+
 
   return (
     <div id="container">
@@ -329,26 +389,24 @@ export default function RegistroForm() {
         <br />
         <br />
       </div>
-      
-  
-      <button id="registro_adm"  onClick={onRegistroClick}>
+      <button id="registro_adm" onClick={onRegistroClick}>
         Registrar usuario
       </button>
-      
       <button id="registro_adm" onClick={onSearchUserClick}>
         Buscar usuario
       </button>
-      
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
- &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+      <button id="btnUpdate" onClick={onUpdateUserClick}>
+        Editar usuario
+      </button>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
       <Link to={"/"}>
         <button id="btn-atras2">←</button>
-      </Link> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+      </Link>{" "}
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
       <button id="registro_adm" onClick={onDeleteUserClick}>
         Eliminar usuario
       </button>
- </div>
-    
+    </div>
   );
 }

@@ -7,6 +7,7 @@ import RegistroForm from './Components/login/registro.jsx'
 import SignIn from './Components/Sign-in/Sign-in.jsx'
 import UserPag from './Components/UserPag/UserPag.jsx'
 import RegistroFormAdm from './Components/RegistroAdm/registroAdm.jsx'
+import NotFound from './Components/NotFound/NotFound.jsx'
 
 const router =createBrowserRouter([
   {
@@ -28,7 +29,11 @@ const router =createBrowserRouter([
   {
     path:'/admpag',
     element: <RegistroFormAdm/>
-  }
+  },
+  {
+    path: '*',
+    element: <NotFound/>,
+  },
 ])
 
 

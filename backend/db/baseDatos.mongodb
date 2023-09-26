@@ -95,7 +95,6 @@ db.createCollection("device",{
 })
 
 
-
 db.device.insertMany([{
   Device_id: 1,
   Device_name: "cien años de soledad",

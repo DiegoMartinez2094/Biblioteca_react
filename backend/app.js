@@ -12,7 +12,7 @@ export default config;
 (async () => {
   const db = await con();
   const usuarios = db.collection('user');
-  const device = db.collection('device');
+  const devices = db.collection('device');
 
   app.use(express.json());
 
@@ -213,7 +213,7 @@ export default config;
       Device_comments,
     };
   
-    await device.insertOne(DataBook);
+    await devices.insertOne(DataBook);
 
     // Enviar una respuesta de éxito
     res.status(201).json({ message: 'Device registrado correctamente' });
@@ -224,16 +224,17 @@ export default config;
   }
 });
 
-app.post('/api/verificarLibro', async (req, res) => {
+app.post('/api/verificarDevice_id', async (req, res) => {
   try {
     const { Device_id } = req.body;
 
     // Buscar el Id en la base de datos
-    const existingDevice = await device.findOne({ Device_id });
+    const existingDevice = await devices.findOne({ Device_id });
 
     if (existingDevice) {
       // El Dispositivo ya está registrado
       res.status(200).json({ message: 'Dispositivo ya registrado' });
+     
     } else {
       // El Dispositivo no está registrado
       res.status(404).json({ message: 'dispositivo no registrado' });
@@ -245,6 +246,28 @@ app.post('/api/verificarLibro', async (req, res) => {
   }
 });
 
+app.get("/api/obtenerLibroPorId", async (req, res) => {
+  try {
+    const  Device_id   = req.query.Device_id;; // Obtén el device por id
+    console.log(Device_id);
+    
+    // Busca el libro en la colección 'device' id
+    const Device = await devices.findOne({ Device_id });
+    console.log(Device)
+
+    if (Device) {
+      // Si se encuentra el libro, responde con los datos del libro
+      res.status(200).json(Device);
+    } else {
+      // Si no se encuentra el libro, responde con un mensaje de error
+      res.status(404).json({ message: 'libro no encontrado' });
+    }
+  } catch (error) {
+    // Maneja los errores, si los hay
+    console.error("Error al obtener el libro por id:", error);
+    res.status(500).json({ message: "Error al obtener el libro" });
+  }
+});
 
 
   

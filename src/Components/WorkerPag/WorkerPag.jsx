@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./WorkerPag.css";
 
@@ -148,6 +148,7 @@ export default function WorkerPag() {
   const [Device_cost, setDevice_cost] = useState("");
   const [Device_status, setDevice_status] = useState("");
   const [Device_comments, setDevice_comments] = useState("");
+  const [foundDevice, setFoundDevice] = useState(null);
 
   const onDevice_idChange = (e) => {
     setDevice_id(e.target.value);
@@ -171,6 +172,21 @@ export default function WorkerPag() {
     setDevice_comments(e.target.value);
   };
 
+  useEffect(() => {
+    loadDeviceFields(); // Cargar los campos de entrada cuando se actualice
+  }, [foundDevice]);
+
+  const loadDeviceFields = () => {
+    setDevice_id(foundDevice ? foundDevice.Device_id : "");
+    setDevice_name(foundDevice ? foundDevice.Device_name : "");
+    setDescription_device(foundDevice ? foundDevice.Description_device: "");
+    setDevice_category(foundDevice ? foundDevice.Device_category : "");
+    setDevice_cost(foundDevice ? foundDevice.Device_cost : "");
+    setDevice_status(foundDevice ? foundDevice.Device_status : "");
+    setDevice_comments(foundDevice ? foundDevice.Device_comments : "");
+    
+  };
+
   const onRegistroLibroClick = async () => {
     if (!Device_id || !Device_name || !Description_device || !Device_category || !Device_cost || !Device_status) {
       alert("Todos los campos son requeridos excepto el de comentario");   // Validar que todos los campos estén llenos
@@ -180,7 +196,7 @@ export default function WorkerPag() {
     try {
       // Verificar si el Libro ya está registrado
       const existingDevice = await fetch(
-        `http://${config.hostname}:${config.port}/api/verificarLibro`,
+        `http://${config.hostname}:${config.port}/api/verificarDevice_id`,
         {
           method: "POST",
           headers: {
@@ -242,6 +258,49 @@ export default function WorkerPag() {
         setDevice_cost("");
         setDevice_status("");
         setDevice_comments("");
+      }
+    } catch (error) {
+      console.error("Error al realizar la solicitud:", error);
+    }
+  };
+
+  const onSearchLibroClick = async () => {
+    if (!Device_id) {
+      alert("Por favor, ingrese un id del libro");
+      return;
+    }
+    try {
+      const Device_idExistsResponse = await fetch(
+        `http://${config.hostname}:${config.port}/api/verificarDevice_id`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ Device_id: parseInt(Device_id) }),
+        }
+      );
+
+      if (Device_idExistsResponse.status === 200) {
+        const DeviceDataResponse = await fetch(
+         
+          `http://${config.hostname}:${config.port}/api/obtenerLibroPorId?Device_id=${Device_id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (DeviceDataResponse.status === 200) {
+          alert
+          const deviceData = await DeviceDataResponse.json();
+          setFoundDevice(deviceData);
+        }
+      } else {
+        alert("id de libro no encontrado");
+        setFoundDevice(null);
       }
     } catch (error) {
       console.error("Error al realizar la solicitud:", error);
@@ -377,7 +436,7 @@ export default function WorkerPag() {
             Registrar libro
           </button>
           &nbsp;&nbsp;
-          <button id="registro_adm" /**onClick={onSearchLibroClick} */>
+          <button id="registro_adm"onClick={onSearchLibroClick} >
             Buscar libro
           </button>
           &nbsp;&nbsp; &nbsp;

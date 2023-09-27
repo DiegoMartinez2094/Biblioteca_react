@@ -15,7 +15,7 @@ db.createCollection("user", {
       properties: {
         User_id: {
           bsonType: "int",
-          description: "User_id could be of string type and is required",
+          description: "User_id could be of int type and is required",
         },
         User_name: {
           bsonType: "string",
@@ -46,6 +46,144 @@ db.createCollection("user", {
     },
   },
 });
+
+db.createCollection("device",{
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: [
+        "Device_id",
+        "Device_name",
+        "Description_device",
+        "Device_category",
+        "Device_status",
+        "Device_cost",
+      ],
+      properties: { 
+        Device_id: {
+          bsonType: "int",
+          description: "Device_id could be of int type and is required",
+        },
+        Device_name: {
+          bsonType: "string",
+          description: "Device_name could be of string type and is required",
+        },
+        Description_device: {
+          bsonType: "string",
+          description: "Description_device could be of string type and is required",
+        },
+        Device_category: {
+          bsonType: "string",
+          description: "Device_category could be of string type and is required",
+        },
+        Device_status: {
+          bsonType: "string",
+          description: "Device_status could be of string type and is required",
+          enum: ["disponible", "prestado"],
+        },
+        Device_cost: {
+          bsonType: "int",
+          description: "Device_cost could be of int type and is required",
+        },
+        Device_comments: {
+          bsonType: "string",
+          description: "Device_comments could be of string type and is required",
+        }
+       }
+    } 
+  }
+})
+
+
+db.device.insertMany([{
+  Device_id: 1,
+  Device_name: "cien años de soledad",
+  Description_device: "La novela mezcla elementos de realismo mágico con la historia de Colombia y presenta una narrativa que se centra en temas como el amor, la soledad, la violencia, la política y la búsqueda de la identidad",
+  Device_category: "realismo mágico",
+  Device_status:"disponible",
+  Device_cost:20000,
+  Device_comments:"Buen libro"
+},
+{
+  Device_id: 2,
+  Device_name: "El señor de los anillos",
+  Description_device: "Una épica historia de fantasía que sigue las aventuras de Frodo Bolsón, un hobbit que debe destruir el Anillo Único, una poderosa arma creada por el Señor Oscuro Sauron.",
+  Device_category: "fantasía",
+  Device_status: "disponible",
+  Device_cost: 30000,
+  Device_comments: "Una obra maestra de la literatura fantástica."
+},
+{
+  Device_id: 3,
+  Device_name: "El Quijote",
+  Description_device: "La historia de Don Quijote de la Mancha, un hidalgo manchego que se embarca en una serie de aventuras junto a su escudero Sancho Panza.",
+  Device_category: "clásico",
+  Device_status: "disponible",
+  Device_cost: 20000,
+  Device_comments: "Una obra maestra de la literatura universal."
+},
+{
+  Device_id: 4,
+  Device_name: "Pedro Páramo",
+  Description_device: "La historia de Juan Preciado, un hombre que viaja a Comala, su pueblo natal, en busca de su padre, Pedro Páramo, un terrateniente poderoso y temido.",
+  Device_category: "realismo mágico",
+  Device_status: "disponible",
+  Device_cost: 20000,
+  Device_comments: "Una obra maestra de la literatura mexicana."
+},{
+  Device_id: 5,
+  Device_name: "La casa de los espíritus",
+  Description_device: "La historia de tres generaciones de mujeres de una familia de la alta sociedad chilena, desde el siglo XIX hasta el golpe de Estado de 1973.",
+  Device_category: "realismo mágico",
+  Device_status: "disponible",
+  Device_cost: 25000,
+  Device_comments: "Una obra maestra de la literatura latinoamericana."
+},
+{
+  Device_id: 6,
+  Device_name: "El amor en los tiempos del cólera",
+  Description_device: "La historia de amor de Florentino Ariza y Fermina Daza, que se extiende durante más de 50 años.",
+  Device_category: "realismo mágico",
+  Device_status: "disponible",
+  Device_cost: 20000,
+  Device_comments: "Una historia de amor inolvidable."
+},{
+  Device_id: 7,
+  Device_name: "Harry Potter y la piedra filosofal",
+  Description_device: "La historia de un niño huérfano que descubre que es un mago y es aceptado en el Colegio Hogwarts de Magia y Hechicería.",
+  Device_category: "fantasía",
+  Device_status: "disponible",
+  Device_cost: 25000,
+  Device_comments: "Una serie de libros inolvidable."
+},
+{
+  Device_id: 8,
+  Device_name: "El hobbit",
+  Description_device: "La historia de Bilbo Bolsón, un hobbit que se embarca en una aventura para recuperar el tesoro del dragón Smaug.",
+  Device_category: "fantasía",
+  Device_status: "disponible",
+  Device_cost: 20000,
+  Device_comments: "Una historia clásica de fantasía."
+},
+{
+  Device_id: 9,
+  Device_name: "La Odisea",
+  Description_device: "La historia del viaje de regreso de Odiseo, rey de Ítaca, a su patria después de la Guerra de Troya.",
+  Device_category: "clásico",
+  Device_status: "disponible",
+  Device_cost: 20000,
+  Device_comments: "Una obra maestra de la literatura universal."
+},
+{
+  Device_id: 10,
+  Device_name: "Hamlet",
+  Description_device: "La historia de un príncipe danés que se venga de la muerte de su padre.",
+  Device_category: "clásico",
+  Device_status: "disponible",
+  Device_cost: 25000,
+  Device_comments: "Una tragedia clásica de Shakespeare."
+}
+])
 
 db.user.insertMany([
   {

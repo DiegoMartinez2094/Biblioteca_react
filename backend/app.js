@@ -12,11 +12,16 @@ export default config;
 (async () => {
   const db = await con();
   const usuarios = db.collection('user');
+  const device = db.collection('device');
 
   app.use(express.json());
 
   // Habilita CORS
   app.use(cors());
+
+  //------------------------------------------------------------------------------------------------------------------------------------
+
+  //uSUARIOS/
 
   app.get("/api/obtenerUltimoUserId", async (req, res) => {
     try {
@@ -36,7 +41,7 @@ export default config;
       res.status(500).json({ message: "Error al obtener el último User_id" });
     }
   });
-  //para registrar usuario
+
   app.post('/api/registrar', async (req, res) => {
     try {
       const {  User_id,User_name, Password, Email, Phone, Address, Role  } = req.body;
@@ -160,7 +165,6 @@ export default config;
     }
   });
 
-
   app.put("/api/editarUsuarioPorEmail", async (req, res) => {
     try {
       const { Email } = req.query; // Obtén el correo electrónico desde la consulta
@@ -190,9 +194,61 @@ export default config;
       res.status(500).json({ message: "Error al editar el usuario por correo electrónico" });
     }
   });
-  
-  
 
+  //---------------------------------------------------------------------------------------------------------------------------------
+
+ //LIBROS//
+
+ app.post('/api/registrarDevice', async (req, res) => {
+  try {
+    const {  Device_id,Device_name, Description_device, Device_category, Device_cost, Device_status, Device_comments  } = req.body;
+    
+    const DataBook = {
+      Device_id,
+      Device_name,
+      Description_device,
+      Device_category,
+      Device_cost,
+      Device_status,
+      Device_comments,
+    };
+  
+    await device.insertOne(DataBook);
+
+    // Enviar una respuesta de éxito
+    res.status(201).json({ message: 'Device registrado correctamente' });
+  } catch (error) {
+    // Manejar errores, si los hay
+    console.error('Error al registrar Device app.js:', error);
+    res.status(500).json({ message: 'Error al registrar Device app.js' });
+  }
+});
+
+app.post('/api/verificarLibro', async (req, res) => {
+  try {
+    const { Device_id } = req.body;
+
+    // Buscar el Id en la base de datos
+    const existingDevice = await device.findOne({ Device_id });
+
+    if (existingDevice) {
+      // El Dispositivo ya está registrado
+      res.status(200).json({ message: 'Dispositivo ya registrado' });
+    } else {
+      // El Dispositivo no está registrado
+      res.status(404).json({ message: 'dispositivo no registrado' });
+    }
+  } catch (error) {
+    // Manejar errores, si los hay
+    console.error('Error al verificar Dispositivo app.js:', error);
+    res.status(500).json({ message: 'Error al verificar Dispositivo app.js' });
+  }
+});
+
+
+
+  
+//--------------------------------------------------------------------------------------------------------------------------------
   app.listen(config.port, config.hostname, () => {
 
     console.log(`Servidor iniciado en http://${config.hostname}:${config.port}`);

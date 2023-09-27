@@ -1,4 +1,4 @@
-#Device_name, #Device_category, #Device_status, #Device_cost, #Device_comments, #Description_device{
+#Device_id, #Device_name, #Device_category, #Device_status, #Device_cost, #Device_comments, #Description_device{
     padding: 5px;
     margin-bottom: 5px;
     border: 1px solid #ccc;
@@ -9,7 +9,7 @@
 }
 
 #container1{
-    margin-top: 6rem;
+    margin-top: 7rem;
     transform: scale(1.40);
     margin-left: 10%;
     width: 19rem;

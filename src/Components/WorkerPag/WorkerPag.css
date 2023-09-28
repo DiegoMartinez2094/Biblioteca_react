@@ -1,4 +1,4 @@
-#Device_name, #Device_category, #Device_status, #Device_cost, #Device_comments, #Description_device{
+#Device_id, #Device_name, #Device_category, #Device_status, #Device_cost, #Device_comments, #Description_device{
     padding: 5px;
     margin-bottom: 5px;
     border: 1px solid #ccc;
@@ -9,17 +9,29 @@
 }
 
 #container1{
-    margin-top: 6rem;
+    margin-top: 7rem;
     transform: scale(1.40);
     margin-left: 10%;
-    max-width: 19rem;
+    width: 19rem;
     padding-left: 10px;
     padding-right: 10px;
     background-color: #ffffff;
     text-align: center; 
     padding-top: 3px; 
-    border-radius: 10px;
-    
+    border-radius: 10px; 
+}
+
+#container2{
+  margin-top: 5rem;
+  transform: scale(1.40);
+  margin-left: 36%;
+  max-width: 19rem;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #ffffff;
+  text-align: center; 
+  padding-top: 3px; 
+  border-radius: 10px;
 }
 
 #inscLibro {

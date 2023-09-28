@@ -12,11 +12,16 @@ export default config;
 (async () => {
   const db = await con();
   const usuarios = db.collection('user');
+  const devices = db.collection('device');
 
   app.use(express.json());
 
   // Habilita CORS
   app.use(cors());
+
+  //------------------------------------------------------------------------------------------------------------------------------------
+
+  //uSUARIOS/
 
   app.get("/api/obtenerUltimoUserId", async (req, res) => {
     try {
@@ -36,7 +41,7 @@ export default config;
       res.status(500).json({ message: "Error al obtener el último User_id" });
     }
   });
-  //para registrar usuario
+
   app.post('/api/registrar', async (req, res) => {
     try {
       const {  User_id,User_name, Password, Email, Phone, Address, Role  } = req.body;
@@ -160,7 +165,6 @@ export default config;
     }
   });
 
-
   app.put("/api/editarUsuarioPorEmail", async (req, res) => {
     try {
       const { Email } = req.query; // Obtén el correo electrónico desde la consulta
@@ -190,9 +194,166 @@ export default config;
       res.status(500).json({ message: "Error al editar el usuario por correo electrónico" });
     }
   });
-  
-  
 
+  //---------------------------------------------------------------------------------------------------------------------------------
+
+ //LIBROS//
+
+ app.post('/api/registrarDevice', async (req, res) => {
+  try {
+    const {  Device_id,Device_name, Description_device, Device_category, Device_cost, Device_status, Device_comments  } = req.body;
+    
+    const DataBook = {
+      Device_id,
+      Device_name,
+      Description_device,
+      Device_category,
+      Device_cost,
+      Device_status,
+      Device_comments,
+    };
+  
+    await devices.insertOne(DataBook);
+
+    // Enviar una respuesta de éxito
+    res.status(201).json({ message: 'Device registrado correctamente' });
+  } catch (error) {
+    // Manejar errores, si los hay
+    console.error('Error al registrar Device app.js:', error);
+    res.status(500).json({ message: 'Error al registrar Device app.js' });
+  }
+});
+
+app.post('/api/verificarDevice_id', async (req, res) => {
+  try {
+    const { Device_id } = req.body;
+
+    // Buscar el Id en la base de datos
+    const existingDevice = await devices.findOne({ Device_id });
+
+    if (existingDevice) {
+      // El Dispositivo ya está registrado
+      res.status(200).json(existingDevice);
+    } else {
+      // El Dispositivo no está registrado
+      res.status(404).json({ message: 'dispositivo no registrado' });
+    }
+  } catch (error) {
+    // Manejar errores, si los hay
+    console.error('Error al verificar Dispositivo app.js:', error);
+    res.status(500).json({ message: 'Error al verificar Dispositivo app.js' });
+  }
+});
+
+app.get("/api/verificarDevice_id", async (req, res) => {
+  try {
+    const { Device_id } = req.query; // Usar req.query para obtener el parámetro de consulta
+
+    // Convertir Device_id a número entero
+    const Device_idInt = parseInt(Device_id);
+
+    // Buscar el ID en la base de datos
+    const existingDevice = await devices.findOne({ Device_id: Device_idInt });
+
+    if (existingDevice) {
+      // El Dispositivo ya está registrado
+      res.status(200).json(existingDevice);
+    } else {
+      // El Dispositivo no está registrado
+      res.status(404).json({ message: 'dispositivo no registrado' });
+    }
+  } catch (error) {
+    // Manejar errores, si los hay
+    console.error('Error al verificar Dispositivo app.js:', error);
+    res.status(500).json({ message: 'Error al verificar Dispositivo app.js' });
+  }
+});
+
+app.get("/api/obtenerLibroPorId", async (req, res) => {
+  try {
+    const { Device_id } = req.query; // Usar req.query para obtener el parámetro de consulta
+
+    // Convertir Device_id a número entero
+    const Device_idInt = parseInt(Device_id);
+
+    const existingDevice = await devices.findOne({ Device_id: Device_idInt });
+    if (existingDevice) {
+      // Si se encuentra el libro, responde con los datos del libro
+      res.status(200).json(existingDevice);
+    } else {
+      // Si no se encuentra el libro, responde con un mensaje de error
+      res.status(404).json({ message: 'libro no encontrado' });
+    }
+  } catch (error) {
+    // Maneja los errores, si los hay
+    console.error("Error al obtener el libro por ID:", error);
+    res.status(500).json({ message: "Error al obtener el libro" });
+  }
+});
+
+app.delete("/api/eliminarDevicePorId", async (req, res) => {
+  try {
+    const { Device_id } = req.query; 
+    const result = await devices.deleteOne({ Device_id: parseInt(Device_id) });
+
+    if (result.deletedCount > 0) { 
+      res.status(200).json({ message: 'dispositivo eliminado correctamente' });
+    } else {
+      res.status(404).json({ message: 'dispositivo no encontrado' });
+    }
+  } catch (error) {
+    
+    console.error("Error al eliminar el dispositivo por ID:", error);
+    res.status(500).json({ message: "Error al eliminar el dispositivo por ID" });
+  }
+});
+
+app.put("/api/editarDevicePorId", async (req, res) => {
+  try {
+    const { New_Device_id } = req.body; // Nuevo valor para Device_id
+    const {
+      Device_name,
+      Description_device,
+      Device_category,
+      Device_cost,
+      Device_status,
+      Device_comments,
+    } = req.body;
+
+    const result = await devices.updateOne(
+      { Device_id: parseInt(New_Device_id) }, // Utilice el nuevo valor para buscar el dispositivo
+      {
+        $set: {
+          Device_id: parseInt(New_Device_id), // Actualice el Device_id
+          Device_name,
+          Description_device,
+          Device_category,
+          Device_cost,
+          Device_status,
+          Device_comments,
+        },
+      }
+    );
+
+    if (result.modifiedCount > 0) {
+      // Si se realizó una modificación en el dispositivo, responde con un mensaje de éxito
+      res.status(200).json({ message: 'Dispositivo editado correctamente' });
+    } else {
+      // Si no se encontró el dispositivo, responde con un mensaje de error
+      res.status(404).json({ message: 'Dispositivo no encontrado' });
+    }
+  } catch (error) {
+    // Maneja los errores, si los hay
+    console.error("Error al editar el Dispositivo:", error);
+    res.status(500).json({ message: "Error al editar el Dispositivo" });
+  }
+});
+
+
+
+
+  
+//--------------------------------------------------------------------------------------------------------------------------------
   app.listen(config.port, config.hostname, () => {
 
     console.log(`Servidor iniciado en http://${config.hostname}:${config.port}`);

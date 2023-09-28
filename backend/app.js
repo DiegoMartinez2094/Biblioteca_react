@@ -291,6 +291,65 @@ app.get("/api/obtenerLibroPorId", async (req, res) => {
   }
 });
 
+app.delete("/api/eliminarDevicePorId", async (req, res) => {
+  try {
+    const { Device_id } = req.query; 
+    const result = await devices.deleteOne({ Device_id: parseInt(Device_id) });
+
+    if (result.deletedCount > 0) { 
+      res.status(200).json({ message: 'dispositivo eliminado correctamente' });
+    } else {
+      res.status(404).json({ message: 'dispositivo no encontrado' });
+    }
+  } catch (error) {
+    
+    console.error("Error al eliminar el dispositivo por ID:", error);
+    res.status(500).json({ message: "Error al eliminar el dispositivo por ID" });
+  }
+});
+
+app.put("/api/editarDevicePorId", async (req, res) => {
+  try {
+    const { New_Device_id } = req.body; // Nuevo valor para Device_id
+    const {
+      Device_name,
+      Description_device,
+      Device_category,
+      Device_cost,
+      Device_status,
+      Device_comments,
+    } = req.body;
+
+    const result = await devices.updateOne(
+      { Device_id: parseInt(New_Device_id) }, // Utilice el nuevo valor para buscar el dispositivo
+      {
+        $set: {
+          Device_id: parseInt(New_Device_id), // Actualice el Device_id
+          Device_name,
+          Description_device,
+          Device_category,
+          Device_cost,
+          Device_status,
+          Device_comments,
+        },
+      }
+    );
+
+    if (result.modifiedCount > 0) {
+      // Si se realizó una modificación en el dispositivo, responde con un mensaje de éxito
+      res.status(200).json({ message: 'Dispositivo editado correctamente' });
+    } else {
+      // Si no se encontró el dispositivo, responde con un mensaje de error
+      res.status(404).json({ message: 'Dispositivo no encontrado' });
+    }
+  } catch (error) {
+    // Maneja los errores, si los hay
+    console.error("Error al editar el Dispositivo:", error);
+    res.status(500).json({ message: "Error al editar el Dispositivo" });
+  }
+});
+
+
 
 
   

@@ -187,7 +187,7 @@ export default function WorkerPag() {
     
   };
 
-  const onRegistroLibroClick = async () => {
+  const onRegistroDeviceClick = async () => {
     if (!Device_id || !Device_name || !Description_device || !Device_category || !Device_cost || !Device_status) {
       alert("Todos los campos son requeridos excepto el de comentario");   // Validar que todos los campos estén llenos
       return;
@@ -264,7 +264,7 @@ export default function WorkerPag() {
     }
   };
 
-  const onSearchLibroClick = async () => {
+  const onSearchDeviceClick = async () => {
     if (!Device_id) {
       alert("Por favor, ingrese un ID del libro");
       return;
@@ -308,7 +308,120 @@ export default function WorkerPag() {
       console.error("Error al realizar la solicitud:", error);
     }
   };
+
+  const onDeleteDeviceClick = async () => {
+    if (!Device_id) {
+      alert("Por favor, ingrese un id de libro");
+      return;
+    }
+    try {
+      // Verificar si el dispositivo existe
+      const Device_idExistsResponse = await fetch(
+        `http://${config.hostname}:${config.port}/api/verificarDevice_id?Device_id=${parseInt(Device_id)}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+        
+      if (Device_idExistsResponse.status === 200) {
+        const DeviceDataDelete = await fetch(
+          
+          `http://${config.hostname}:${config.port}/api/eliminarDevicePorId?Device_id=${Device_id}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+          
+        if (DeviceDataDelete.status === 200) {
+          alert("libro eliminado");
+          setDevice_id("");
+          setDevice_name("");
+          setDescription_device("");
+          setDevice_category("");
+          setDevice_cost("");
+          setDevice_status("");
+          setDevice_comments("");
+        } else {
+          alert("id libro no encontrado");
+          setFoundDevice(null);
+        }
+      }
+    } catch (error) {
+      console.error("Error al realizar la solicitud:", error);
+    }
+  };
   
+  const onUpdateLibroClick = async () => {
+    if (
+      !Device_id ||
+      !Device_name ||
+      !Description_device ||
+      !Device_category ||
+      !Device_cost ||
+      !Device_status
+    ) {
+      // Validar que todos los campos estén llenos
+      alert("Por favor, complete todos los campos.");
+      return;
+    }
+  
+    try {
+      const Device_idExistsResponse = await fetch(
+        `http://${config.hostname}:${config.port}/api/verificarDevice_id?Device_id=${Device_id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(Device_idExistsResponse); // 200
+      if (Device_idExistsResponse.status === 200) {
+        const DeviceDataUpdate = await fetch(
+          `http://${config.hostname}:${config.port}/api/editarDevicePorId`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              New_Device_id: Device_id, // Nuevo valor para Device_id
+              Device_name,
+              Description_device,
+              Device_category,
+              Device_cost,
+              Device_status,
+              Device_comments,
+            }),
+          }
+        );
+        console.log(DeviceDataUpdate.status);
+        if (DeviceDataUpdate.status === 200) {
+          alert("Dispositivo editado exitosamente");
+          setDevice_id("");
+          setDevice_name("");
+          setDescription_device("");
+          setDevice_category("");
+          setDevice_cost("");
+          setDevice_status("");
+          setDevice_comments("");
+        } else {
+          alert("Id de dispositivo no encontrado");
+          setFoundDevice(null);
+        }
+      }
+    } catch (error) {
+      console.error("Error al realizar la solicitud:", error);
+    }
+  };
+  
+
   
 
 
@@ -435,16 +548,16 @@ export default function WorkerPag() {
               value={Device_comments}
             />
           </div>
-          <h4>Buscar o eliminar libro por el Id</h4>&nbsp;&nbsp;&nbsp;
-          <button id="registro_adm" onClick={onRegistroLibroClick}>
+          <h4>Buscar o eliminar libro por el Id, el Id no es editable</h4>&nbsp;&nbsp;&nbsp;
+          <button id="registro_adm" onClick={onRegistroDeviceClick}>
             Registrar libro
           </button>
           &nbsp;&nbsp;
-          <button id="registro_adm"onClick={onSearchLibroClick} >
+          <button id="registro_adm"onClick={onSearchDeviceClick} >
             Buscar libro
           </button>
           &nbsp;&nbsp; &nbsp;
-          <button id="btnUpdate" /**onClick={onUpdateLibroClick} */>
+          <button id="btnUpdate" onClick={onUpdateLibroClick}> 
             Editar libro
           </button>
           &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
@@ -454,8 +567,8 @@ export default function WorkerPag() {
             <button id="btn-atras2">←</button>
           </Link>{" "}
           &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
-          <button id="registro_adm" /**onClick={onDeleteUserClick} */>
-            Eliminar usuario
+          <button id="registro_adm" onClick={onDeleteDeviceClick} >
+            Eliminar libro
           </button>
         </div>
       )}

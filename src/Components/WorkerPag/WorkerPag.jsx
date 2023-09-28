@@ -4,8 +4,8 @@ import "./WorkerPag.css";
 
 export default function WorkerPag() {
   const [formularioLibroVisible, setFormularioLibroVisible] = useState(false);
-  const [formularioUsuarioVisible, setFormularioUsuarioVisible] =
-    useState(false);
+  const [formularioUsuarioVisible, setFormularioUsuarioVisible] = useState(false);
+  const [listadoLibrosVisible, setlistadoLibrosVisible] = useState(false);
 
   function toggleFormularioUsuario() {
     setFormularioUsuarioVisible(!formularioUsuarioVisible);
@@ -13,6 +13,11 @@ export default function WorkerPag() {
   function toggleFormularioLibro() {
     setFormularioLibroVisible(!formularioLibroVisible);
   }
+
+  function togglelistadoLibros() {
+    setlistadoLibrosVisible(!listadoLibrosVisible);
+  }
+
 
   const config = JSON.parse(import.meta.env.VITE_My_server);
 
@@ -421,9 +426,8 @@ export default function WorkerPag() {
     }
   };
   
-
-  
-
+  const onShowLibroClick = async () => {
+  };
 
   //-----------------------------------------------------------------------------------------------------------
 
@@ -444,8 +448,8 @@ export default function WorkerPag() {
         Registro de libros
       </button>
 
-      <button id="inscLibro" style={{ marginLeft: "20px"}} onClick={toggleFormularioLibro}>
-      listado de Libros
+      <button id="inscLibro" style={{ marginLeft: "20px"}} onClick={togglelistadoLibros}>
+      Listado de Libros
       </button>
 
       <button id="inscLibro"  style={{ marginLeft: "20px"}} onClick={toggleFormularioUsuario}>
@@ -580,6 +584,50 @@ export default function WorkerPag() {
           </button>
         </div>
       )}
+
+
+       {listadoLibrosVisible && (
+        <div id="container3">
+          <h1>Tabla de Libros</h1>
+    <table >
+        <thead>
+            <tr>
+                <th>ID del Libro</th>
+                <th>Nombre del Libro</th>
+                <th>Descripción</th>
+                <th>Categoría</th>
+                <th>Costo</th>
+                <th>Estado del Libro</th>
+                <th>Comentarios</th>
+            </tr>
+        </thead>
+        <tbody>
+            {/* <!-- Aquí debes llenar la tabla con los datos de tu base de datos --> */}
+            <tr>
+                <td>1</td>
+                <td>Libro 1</td>
+                <td>Descripción del Libro 1</td>
+                <td>Categoría 1</td>
+                <td>$20.00</td>
+                <td>Disponible</td>
+                <td>Comentario sobre Libro 1</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Libro 2</td>
+                <td>Descripción del Libro 2</td>
+                <td>Categoría 2</td>
+                <td>$25.00</td>
+                <td>Agotado</td>
+                <td>Comentario sobre Libro 2</td>
+            </tr>
+            {/* <!-- Repite esta estructura para cada libro de tu base de datos --> */}
+        </tbody>
+    </table>
+        </div>
+      )}
+
+
       {formularioUsuarioVisible && (
         <div id="container2">
           <h1 style={{ marginBottom: "-3px", marginTop: "0px" }}>Usuarios</h1>
@@ -673,6 +721,8 @@ export default function WorkerPag() {
           </button>
         </div>
       )}
+
+     
     </>
   );
 }

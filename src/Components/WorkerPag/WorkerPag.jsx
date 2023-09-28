@@ -444,9 +444,17 @@ export default function WorkerPag() {
         Registro de libros
       </button>
 
-      <button id="inscLibro" onClick={toggleFormularioUsuario}>
+      <button id="inscLibro" style={{ marginLeft: "20px"}} onClick={toggleFormularioLibro}>
+      listado de Libros
+      </button>
+
+      <button id="inscLibro"  style={{ marginLeft: "20px"}} onClick={toggleFormularioUsuario}>
         Registro de usuarios
       </button>
+      <button id="inscLibro"  style={{ marginLeft: "20px"}} onClick={toggleFormularioLibro}>
+       prestamos
+      </button>
+
 
       {formularioLibroVisible && (
         <div id="container1">

@@ -94,6 +94,94 @@ db.createCollection("device",{
   }
 })
 
+db.createCollection("loan",{
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: [
+        "Loan_ID",
+        "User_ID",
+        "Device_id",
+        "Loan_Date",
+        "Expected_Return_Date",
+        "Loan_Status",
+        "Physical_Condition_Before",
+        "Physical_Condition_After"
+      ],
+      properties: { 
+        Loan_ID: {
+          bsonType: "int",
+          description: "Loan_ID could be of int type and is required",
+        },
+        User_ID: {
+          bsonType: "int",
+          description: "User_ID could be of int type and is required",
+        },
+        Device_id: {
+          bsonType: "int",
+          description: "Device_id could be of int type and is required",
+        },
+        Loan_Date: {
+          bsonType: "date",
+          description: "Loan_Date could be of date type and is required",
+        },
+        Expected_Return_Date: {
+          bsonType: "date",
+          description: "Expected_Return_Date could be of date type and is required",
+        },
+        Actual_Return_Date: {
+          bsonType: "date",
+          description: "Actual_Return_Date could be of int type and is required",
+        },
+        Loan_Status : {
+          bsonType: "string",
+          description: "Loan_Status could be of string type and is required",
+          enum: ["pendiente", "entregado"],
+        },
+        Loan_Comments : {
+          bsonType: "string",
+          description: "Loan_Comments  could be of string type",
+        },
+        Physical_Condition_Before  : {
+          bsonType: "string",
+          description: "Physical_Condition_Before  could be of string type and is required",
+          enum: ["Bien", "desgastado", "dañado"],
+        },
+        Physical_Condition_After  : {
+          bsonType: "string",
+          description: "Physical_Condition_After  could be of string type and is required",
+          enum: ["Bien", "desgastado", "dañado"],
+        }
+       }
+    } 
+  }
+})
+
+db.loan.insertMany([{
+  Loan_ID: 1,
+  User_ID: 1,
+  Device_id: 1,
+  Loan_Date: new Date("2023-09-28"),
+  Expected_Return_Date: new Date("2023-10-28"),
+  Actual_Return_Date: new Date("2023-11-28"),
+  Loan_Status: "entregado",
+  Loan_Comments: "Buen libro",
+  Physical_Condition_Before: "Bien",
+  Physical_Condition_After: "desgastado"
+},
+{
+  Loan_ID: 2,
+  User_ID: 2,
+  Device_id: 2,
+  Loan_Date: new Date("2023-09-29"),
+  Expected_Return_Date: new Date("2023-10-30"),
+  Actual_Return_Date: new Date("2023-11-30"),
+  Loan_Status: "entregado",
+  Loan_Comments: "no me gustó",
+  Physical_Condition_Before: "Bien",
+  Physical_Condition_After: "Bien"
+}
+])
 
 db.device.insertMany([{
   Device_id: 1,
@@ -214,3 +302,4 @@ db.user.insertMany([
     Role: "usuario",
   },
 ]);
+

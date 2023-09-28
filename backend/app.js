@@ -233,8 +233,31 @@ app.post('/api/verificarDevice_id', async (req, res) => {
 
     if (existingDevice) {
       // El Dispositivo ya está registrado
-      res.status(200).json({ message: 'Dispositivo ya registrado' });
-     
+      res.status(200).json(existingDevice);
+    } else {
+      // El Dispositivo no está registrado
+      res.status(404).json({ message: 'dispositivo no registrado' });
+    }
+  } catch (error) {
+    // Manejar errores, si los hay
+    console.error('Error al verificar Dispositivo app.js:', error);
+    res.status(500).json({ message: 'Error al verificar Dispositivo app.js' });
+  }
+});
+
+app.get("/api/verificarDevice_id", async (req, res) => {
+  try {
+    const { Device_id } = req.query; // Usar req.query para obtener el parámetro de consulta
+
+    // Convertir Device_id a número entero
+    const Device_idInt = parseInt(Device_id);
+
+    // Buscar el ID en la base de datos
+    const existingDevice = await devices.findOne({ Device_id: Device_idInt });
+
+    if (existingDevice) {
+      // El Dispositivo ya está registrado
+      res.status(200).json(existingDevice);
     } else {
       // El Dispositivo no está registrado
       res.status(404).json({ message: 'dispositivo no registrado' });
@@ -248,26 +271,26 @@ app.post('/api/verificarDevice_id', async (req, res) => {
 
 app.get("/api/obtenerLibroPorId", async (req, res) => {
   try {
-    const  Device_id   = req.query.Device_id;; // Obtén el device por id
-    console.log(Device_id);
-    
-    // Busca el libro en la colección 'device' id
-    const Device = await devices.findOne({ Device_id });
-    console.log(Device)
+    const { Device_id } = req.query; // Usar req.query para obtener el parámetro de consulta
 
-    if (Device) {
+    // Convertir Device_id a número entero
+    const Device_idInt = parseInt(Device_id);
+
+    const existingDevice = await devices.findOne({ Device_id: Device_idInt });
+    if (existingDevice) {
       // Si se encuentra el libro, responde con los datos del libro
-      res.status(200).json(Device);
+      res.status(200).json(existingDevice);
     } else {
       // Si no se encuentra el libro, responde con un mensaje de error
       res.status(404).json({ message: 'libro no encontrado' });
     }
   } catch (error) {
     // Maneja los errores, si los hay
-    console.error("Error al obtener el libro por id:", error);
+    console.error("Error al obtener el libro por ID:", error);
     res.status(500).json({ message: "Error al obtener el libro" });
   }
 });
+
 
 
   

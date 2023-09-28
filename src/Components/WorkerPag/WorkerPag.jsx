@@ -266,25 +266,25 @@ export default function WorkerPag() {
 
   const onSearchLibroClick = async () => {
     if (!Device_id) {
-      alert("Por favor, ingrese un id del libro");
+      alert("Por favor, ingrese un ID del libro");
       return;
     }
     try {
+      // Verificar si el dispositivo existe
       const Device_idExistsResponse = await fetch(
-        `http://${config.hostname}:${config.port}/api/verificarDevice_id`,
+        `http://${config.hostname}:${config.port}/api/verificarDevice_id?Device_id=${parseInt(Device_id)}`,
         {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ Device_id: parseInt(Device_id) }),
         }
       );
-
+  
       if (Device_idExistsResponse.status === 200) {
+        // Si el dispositivo existe, obtener sus datos
         const DeviceDataResponse = await fetch(
-         
-          `http://${config.hostname}:${config.port}/api/obtenerLibroPorId?Device_id=${Device_id}`,
+          `http://${config.hostname}:${config.port}/api/obtenerLibroPorId?Device_id=${parseInt(Device_id)}`,
           {
             method: "GET",
             headers: {
@@ -292,20 +292,24 @@ export default function WorkerPag() {
             },
           }
         );
-
+  
         if (DeviceDataResponse.status === 200) {
-          alert
           const deviceData = await DeviceDataResponse.json();
           setFoundDevice(deviceData);
+        } else {
+          alert("Error al obtener datos del dispositivo");
+          setFoundDevice(null);
         }
       } else {
-        alert("id de libro no encontrado");
+        alert("ID de libro no encontrado");
         setFoundDevice(null);
       }
     } catch (error) {
       console.error("Error al realizar la solicitud:", error);
     }
   };
+  
+  
 
 
   //-----------------------------------------------------------------------------------------------------------

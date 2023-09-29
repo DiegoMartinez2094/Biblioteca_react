@@ -11,7 +11,7 @@
 #container1{
     margin-top: 7rem;
     transform: scale(1.40);
-    margin-left: 10%;
+    margin-left: 13%;
     width: 19rem;
     padding-left: 10px;
     padding-right: 10px;
@@ -24,7 +24,7 @@
 #container2{
   margin-top: 5rem;
   transform: scale(1.40);
-  margin-left: 48%;
+  margin-left: 52%;
   max-width: 19rem;
   padding-left: 10px;
   padding-right: 10px;
@@ -53,8 +53,8 @@
 
 
 #container3{
-  margin-left: 10%;
-  max-width: 60rem;
+
+  max-width: 130rem;
   min-width: 10rem;
   padding-left: 10px;
   padding-right: 10px;

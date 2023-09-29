@@ -472,13 +472,18 @@ export default function WorkerPag() {
         Worker page
       </h1>
 
+      <Link to={"/"}>
+            <button id="inscLibro"
+        style={{ marginLeft: "10px", borderRadius: "30%" }} >Salir</button>
+        </Link>
+
       <button id="inscLibro" onClick={toggleFormularioLibro}>
         Registro de libros
       </button>
 
       <button
         id="inscLibro"
-        style={{ marginLeft: "20px" }}
+        style={{ marginLeft: "50px" }}
         onClick={togglelistadoLibros}
       >
         Listado de Libros
@@ -486,14 +491,14 @@ export default function WorkerPag() {
 
       <button
         id="inscLibro"
-        style={{ marginLeft: "20px" }}
+        style={{ marginLeft: "50px" }}
         onClick={toggleFormularioUsuario}
       >
         Registro de usuarios
       </button>
       <button
         id="inscLibro"
-        style={{ marginLeft: "20px" }}
+        style={{ marginLeft: "50px" }}
         onClick={toggleFormularioLibro}
       >
         prestamos
@@ -608,20 +613,15 @@ export default function WorkerPag() {
           <button id="registro_adm" onClick={onSearchDeviceClick}>
             Buscar libro
           </button>
-          &nbsp;&nbsp; &nbsp;
-          <button id="btnUpdate" onClick={onUpdateLibroClick}>
+         
+         <button id="btnUpdate" onClick={onUpdateLibroClick} style={{ marginLeft: "13px"}}>
             Editar libro
           </button>
-          &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
-          <Link to={"/"}>
-            <button id="btn-atras2">←</button>
-          </Link>{" "}
-          &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
-          <button id="registro_adm" onClick={onDeleteDeviceClick}>
+          <button id="registro_adm" onClick={onDeleteDeviceClick} style={{ marginLeft: "13px"}}>
             Eliminar libro
           </button>
+         
+         
         </div>
       )}
 
@@ -745,9 +745,6 @@ export default function WorkerPag() {
               value={Address}
             />
           </div>
-          <Link to={"/"}>
-            <button id="btn-atras">←</button>
-          </Link>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button id="registro_adm" onClick={onRegistroClick}>
             Registrar

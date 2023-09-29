@@ -349,10 +349,22 @@ app.put("/api/editarDevicePorId", async (req, res) => {
   }
 });
 
+app.get("/api/obtenerDevices", async (req, res) => {
+  try {
+    const device = await devices.find({}).toArray();
+    if (device) {
+      res.status(200).json(device);
+      console.log(device)
+    } else {
+      console.log("No se encontraron dispositivos");
+      res.status(200).json({ message: "No se encontraron dispositivos" });
+    }
+  } catch (error) {
+    console.error("Error al obtener los dispositivos:", error);
+    res.status(500).json({ message: "Error al obtener los dispositivos" });
+  }
+});
 
-
-
-  
 //--------------------------------------------------------------------------------------------------------------------------------
   app.listen(config.port, config.hostname, () => {
 

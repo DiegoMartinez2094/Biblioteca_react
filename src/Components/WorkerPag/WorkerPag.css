@@ -24,7 +24,7 @@
 #container2{
   margin-top: 5rem;
   transform: scale(1.40);
-  margin-left: 36%;
+  margin-left: 48%;
   max-width: 19rem;
   padding-left: 10px;
   padding-right: 10px;
@@ -53,10 +53,9 @@
 
 
 #container3{
-  margin-top: 5rem;
-  transform: scale(1.40);
-  margin-left: 36%;
-  max-width: 40rem;
+  margin-left: 10%;
+  max-width: 60rem;
+  min-width: 10rem;
   padding-left: 10px;
   padding-right: 10px;
   background-color: #ffffff;

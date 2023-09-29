@@ -4,8 +4,10 @@ import "./WorkerPag.css";
 
 export default function WorkerPag() {
   const [formularioLibroVisible, setFormularioLibroVisible] = useState(false);
-  const [formularioUsuarioVisible, setFormularioUsuarioVisible] = useState(false);
+  const [formularioUsuarioVisible, setFormularioUsuarioVisible] =
+    useState(false);
   const [listadoLibrosVisible, setlistadoLibrosVisible] = useState(false);
+  const [devices, setDevices] = useState([]);
 
   function toggleFormularioUsuario() {
     setFormularioUsuarioVisible(!formularioUsuarioVisible);
@@ -17,7 +19,6 @@ export default function WorkerPag() {
   function togglelistadoLibros() {
     setlistadoLibrosVisible(!listadoLibrosVisible);
   }
-
 
   const config = JSON.parse(import.meta.env.VITE_My_server);
 
@@ -184,17 +185,23 @@ export default function WorkerPag() {
   const loadDeviceFields = () => {
     setDevice_id(foundDevice ? foundDevice.Device_id : "");
     setDevice_name(foundDevice ? foundDevice.Device_name : "");
-    setDescription_device(foundDevice ? foundDevice.Description_device: "");
+    setDescription_device(foundDevice ? foundDevice.Description_device : "");
     setDevice_category(foundDevice ? foundDevice.Device_category : "");
     setDevice_cost(foundDevice ? foundDevice.Device_cost : "");
     setDevice_status(foundDevice ? foundDevice.Device_status : "");
     setDevice_comments(foundDevice ? foundDevice.Device_comments : "");
-    
   };
 
   const onRegistroDeviceClick = async () => {
-    if (!Device_id || !Device_name || !Description_device || !Device_category || !Device_cost || !Device_status) {
-      alert("Todos los campos son requeridos excepto el de comentario");   // Validar que todos los campos estén llenos
+    if (
+      !Device_id ||
+      !Device_name ||
+      !Description_device ||
+      !Device_category ||
+      !Device_cost ||
+      !Device_status
+    ) {
+      alert("Todos los campos son requeridos excepto el de comentario"); // Validar que todos los campos estén llenos
       return;
     }
 
@@ -207,7 +214,7 @@ export default function WorkerPag() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({  Device_id: parseInt(Device_id) }),
+          body: JSON.stringify({ Device_id: parseInt(Device_id) }),
         }
       );
 
@@ -216,7 +223,7 @@ export default function WorkerPag() {
         alert("Id Libro registrado anteriormente ");
         return;
       }
-     
+
       const DataBook = {
         Device_id: parseInt(Device_id),
         Device_name,
@@ -224,8 +231,7 @@ export default function WorkerPag() {
         Device_category,
         Device_cost,
         Device_status,
-        Device_comments
-
+        Device_comments,
       };
       // Continuar con el registro del libro
       const response = await fetch(
@@ -238,7 +244,7 @@ export default function WorkerPag() {
           body: JSON.stringify(DataBook),
         }
       );
-     console.log(response.status)
+      console.log(response.status);
       if (response.status === 201) {
         alert("Libro registrado correctamente");
 
@@ -250,7 +256,6 @@ export default function WorkerPag() {
         setDevice_cost("");
         setDevice_status("");
         setDevice_comments("");
-        
       } else {
         // Manejar errores aquí
         console.error("Error al registrar Libro");
@@ -277,7 +282,9 @@ export default function WorkerPag() {
     try {
       // Verificar si el dispositivo existe
       const Device_idExistsResponse = await fetch(
-        `http://${config.hostname}:${config.port}/api/verificarDevice_id?Device_id=${parseInt(Device_id)}`,
+        `http://${config.hostname}:${
+          config.port
+        }/api/verificarDevice_id?Device_id=${parseInt(Device_id)}`,
         {
           method: "GET",
           headers: {
@@ -285,11 +292,13 @@ export default function WorkerPag() {
           },
         }
       );
-  
+
       if (Device_idExistsResponse.status === 200) {
         // Si el dispositivo existe, obtener sus datos
         const DeviceDataResponse = await fetch(
-          `http://${config.hostname}:${config.port}/api/obtenerLibroPorId?Device_id=${parseInt(Device_id)}`,
+          `http://${config.hostname}:${
+            config.port
+          }/api/obtenerLibroPorId?Device_id=${parseInt(Device_id)}`,
           {
             method: "GET",
             headers: {
@@ -297,7 +306,7 @@ export default function WorkerPag() {
             },
           }
         );
-  
+
         if (DeviceDataResponse.status === 200) {
           const deviceData = await DeviceDataResponse.json();
           setFoundDevice(deviceData);
@@ -322,7 +331,9 @@ export default function WorkerPag() {
     try {
       // Verificar si el dispositivo existe
       const Device_idExistsResponse = await fetch(
-        `http://${config.hostname}:${config.port}/api/verificarDevice_id?Device_id=${parseInt(Device_id)}`,
+        `http://${config.hostname}:${
+          config.port
+        }/api/verificarDevice_id?Device_id=${parseInt(Device_id)}`,
         {
           method: "GET",
           headers: {
@@ -330,10 +341,9 @@ export default function WorkerPag() {
           },
         }
       );
-        
+
       if (Device_idExistsResponse.status === 200) {
         const DeviceDataDelete = await fetch(
-          
           `http://${config.hostname}:${config.port}/api/eliminarDevicePorId?Device_id=${Device_id}`,
           {
             method: "DELETE",
@@ -342,7 +352,7 @@ export default function WorkerPag() {
             },
           }
         );
-          
+
         if (DeviceDataDelete.status === 200) {
           alert("libro eliminado");
           setDevice_id("");
@@ -361,7 +371,7 @@ export default function WorkerPag() {
       console.error("Error al realizar la solicitud:", error);
     }
   };
-  
+
   const onUpdateLibroClick = async () => {
     if (
       !Device_id ||
@@ -375,7 +385,7 @@ export default function WorkerPag() {
       alert("Por favor, complete todos los campos.");
       return;
     }
-  
+
     try {
       const Device_idExistsResponse = await fetch(
         `http://${config.hostname}:${config.port}/api/verificarDevice_id?Device_id=${Device_id}`,
@@ -406,7 +416,7 @@ export default function WorkerPag() {
             }),
           }
         );
-        console.log(DeviceDataUpdate.status);
+
         if (DeviceDataUpdate.status === 200) {
           alert("Dispositivo editado exitosamente");
           setDevice_id("");
@@ -425,10 +435,28 @@ export default function WorkerPag() {
       console.error("Error al realizar la solicitud:", error);
     }
   };
-  
-  const onShowLibroClick = async () => {
-  };
 
+  const onShowTableclick = async () => {
+    try {
+      const Device_idExistsResponse = await fetch(
+        `http://${config.hostname}:${config.port}/api/obtenerDevices`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (Device_idExistsResponse.status === 200) {
+        const data = await Device_idExistsResponse.json();
+        setDevices(data); // Guardar los dispositivos en el estado
+        setListadoLibrosVisible(true); // Mostrar la tabla
+      }
+    } catch (error) {
+      console.error("Error al realizar la solicitud:", error);
+    }
+  };
   //-----------------------------------------------------------------------------------------------------------
 
   return (
@@ -448,17 +476,28 @@ export default function WorkerPag() {
         Registro de libros
       </button>
 
-      <button id="inscLibro" style={{ marginLeft: "20px"}} onClick={togglelistadoLibros}>
-      Listado de Libros
+      <button
+        id="inscLibro"
+        style={{ marginLeft: "20px" }}
+        onClick={togglelistadoLibros}
+      >
+        Listado de Libros
       </button>
 
-      <button id="inscLibro"  style={{ marginLeft: "20px"}} onClick={toggleFormularioUsuario}>
+      <button
+        id="inscLibro"
+        style={{ marginLeft: "20px" }}
+        onClick={toggleFormularioUsuario}
+      >
         Registro de usuarios
       </button>
-      <button id="inscLibro"  style={{ marginLeft: "20px"}} onClick={toggleFormularioLibro}>
-       prestamos
+      <button
+        id="inscLibro"
+        style={{ marginLeft: "20px" }}
+        onClick={toggleFormularioLibro}
+      >
+        prestamos
       </button>
-
 
       {formularioLibroVisible && (
         <div id="container1">
@@ -560,16 +599,17 @@ export default function WorkerPag() {
               value={Device_comments}
             />
           </div>
-          <h4>Buscar o eliminar libro por el Id, el Id no es editable</h4>&nbsp;&nbsp;&nbsp;
+          <h4>Buscar o eliminar libro por el Id, el Id no es editable</h4>
+          &nbsp;&nbsp;&nbsp;
           <button id="registro_adm" onClick={onRegistroDeviceClick}>
             Registrar libro
           </button>
           &nbsp;&nbsp;
-          <button id="registro_adm"onClick={onSearchDeviceClick} >
+          <button id="registro_adm" onClick={onSearchDeviceClick}>
             Buscar libro
           </button>
           &nbsp;&nbsp; &nbsp;
-          <button id="btnUpdate" onClick={onUpdateLibroClick}> 
+          <button id="btnUpdate" onClick={onUpdateLibroClick}>
             Editar libro
           </button>
           &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
@@ -579,54 +619,47 @@ export default function WorkerPag() {
             <button id="btn-atras2">←</button>
           </Link>{" "}
           &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
-          <button id="registro_adm" onClick={onDeleteDeviceClick} >
+          <button id="registro_adm" onClick={onDeleteDeviceClick}>
             Eliminar libro
           </button>
         </div>
       )}
 
-
-       {listadoLibrosVisible && (
+      {listadoLibrosVisible && (
         <div id="container3">
-          <h1>Tabla de Libros</h1>
-    <table >
-        <thead>
-            <tr>
-                <th>ID del Libro</th>
-                <th>Nombre del Libro</th>
+          <>
+          <h1>Lista de libros</h1>
+          <button onClick={onShowTableclick}  style={{ marginBottom: "10px", fontSize: "30px" }}>Refrescar tabla</button>
+          <table>
+            <thead>
+              <tr>
+                <th>ID del Dispositivo</th>
+                <th>Nombre del Dispositivo</th>
                 <th>Descripción</th>
                 <th>Categoría</th>
                 <th>Costo</th>
-                <th>Estado del Libro</th>
+                <th>Estado del Dispositivo</th>
                 <th>Comentarios</th>
-            </tr>
-        </thead>
-        <tbody>
-            {/* <!-- Aquí debes llenar la tabla con los datos de tu base de datos --> */}
-            <tr>
-                <td>1</td>
-                <td>Libro 1</td>
-                <td>Descripción del Libro 1</td>
-                <td>Categoría 1</td>
-                <td>$20.00</td>
-                <td>Disponible</td>
-                <td>Comentario sobre Libro 1</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Libro 2</td>
-                <td>Descripción del Libro 2</td>
-                <td>Categoría 2</td>
-                <td>$25.00</td>
-                <td>Agotado</td>
-                <td>Comentario sobre Libro 2</td>
-            </tr>
-            {/* <!-- Repite esta estructura para cada libro de tu base de datos --> */}
-        </tbody>
-    </table>
-        </div>
+              </tr>
+            </thead>
+            <tbody>
+              {devices.map((device) => (
+                <tr key={device._id}>
+                  <td>{device.Device_id}</td>
+                  <td>{device.Device_name}</td>
+                  <td>{device.Description_device}</td>
+                  <td>{device.Device_category}</td>
+                  <td>{device.Device_cost}</td>
+                  <td>{device.Device_status}</td>
+                  <td>{device.Device_comments}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          
+          </>
+      </div>
       )}
-
 
       {formularioUsuarioVisible && (
         <div id="container2">
@@ -721,8 +754,6 @@ export default function WorkerPag() {
           </button>
         </div>
       )}
-
-     
     </>
   );
 }

@@ -355,7 +355,6 @@ app.get("/api/obtenerDevices", async (req, res) => {
     const device = await devices.find({}).toArray();
     if (device) {
       res.status(200).json(device);
-      console.log(device)
     } else {
       console.log("No se encontraron dispositivos");
       res.status(200).json({ message: "No se encontraron dispositivos" });

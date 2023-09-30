@@ -622,7 +622,6 @@ export default function WorkerPag() {
     }
   };
 
-
   const onDeleteLoanClick = async () => {
     if (!Loan_ID) {
       alert("Por favor, ingrese un id de prestamo");
@@ -674,24 +673,22 @@ export default function WorkerPag() {
 
   const onSearchLoanClick = async () => {
     if (!Loan_ID) {
-      alert("Por favor, ingrese un Id de prestamo");
+      alert("Por favor, ingrese un Id de préstamo");
       return;
     }
+  
     try {
-      const Loan_IDExistsResponse = await fetch(
-        `http://${config.hostname}:${config.port}/api/verificarLoan_ID`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ Loan_ID }),
-        }
-      );
-
-      if (Loan_IDExistsResponse.status === 200) {
+      const existingLoan = await fetch(`http://${config.hostname}:${config.port}/api/verificarLoan_ID`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ Loan_ID: parseInt(Loan_ID) }),
+      });
+  
+      if (existingLoan.status === 200) {
         const LoanDataResponse = await fetch(
-          `http://${config.hostname}:${config.port}/api/obtenerUsuarioPorLoan_ID?Loan_ID=${Loan_ID}`,
+          `http://${config.hostname}:${config.port}/api/obtenerLoanPorLoan_ID?Loan_ID=${Loan_ID}`,
           {
             method: "GET",
             headers: {
@@ -699,19 +696,21 @@ export default function WorkerPag() {
             },
           }
         );
-
+  
         if (LoanDataResponse.status === 200) {
-          const userData = await LoanDataResponse.json();
-          setFoundLoan(userData);
+          const LoanData = await LoanDataResponse.json();
+          setFoundLoan(LoanData);
         }
       } else {
-        alert("Id de prestamo no encontrado");
+        alert("Id de préstamo no encontrado");
         setFoundLoan(null);
       }
     } catch (error) {
       console.error("Error al realizar la solicitud:", error);
     }
   };
+  
+  
 
   const onUpdateLoanClick = async () => {
     if (

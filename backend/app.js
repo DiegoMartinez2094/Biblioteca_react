@@ -414,7 +414,6 @@ app.get("/api/obtenerDevices", async (req, res) => {
   app.delete("/api/eliminarLoanPorLoan_ID", async (req, res) => {
     try {
       const { Loan_ID } = req.query; 
-      console.log(Loan_ID);
       const result = await loans.deleteOne({ Loan_ID: parseInt(Loan_ID) });
       if (result.deletedCount > 0) { 
         res.status(200).json({ message: 'prestamo eliminado correctamente' });
@@ -428,6 +427,54 @@ app.get("/api/obtenerDevices", async (req, res) => {
     }
   });
 
+  app.get("/api/obtenerLoanPorLoan_ID", async (req, res) => {
+    try {
+      const { Loan_ID } = req.query; 
+      const Loan_IDInt = parseInt(Loan_ID);
+      const existingLoan = await loans.findOne({ Loan_ID: Loan_IDInt });
+
+      if (existingLoan) {
+           // Formatear las fechas
+    const loanDateISO = existingLoan.Loan_Date;
+    const ExpectDateISO = existingLoan.Actual_Return_Date;
+    const ReturnDateISO = existingLoan.Expected_Return_Date;
+
+    // Convertir las fechas a formato "dd-mm-aaaa"
+    const loanDate = new Date(loanDateISO);
+    const day = String(loanDate.getDate()).padStart(2, "0");
+    const month = String(loanDate.getMonth() + 1).padStart(2, "0");
+    const year = loanDate.getFullYear();
+    const formattedDate = `${year}-${month}-${day}`;
+
+    const ExpectDate = new Date(ExpectDateISO);
+    const day1 = String(ExpectDate.getDate()).padStart(2, "0");
+    const month1 = String(ExpectDate.getMonth() + 1).padStart(2, "0");
+    const year1 = ExpectDate.getFullYear();
+    const formattedDate1 = `${year1}-${month1}-${day1}`;
+
+    const ReturnDate = new Date(ReturnDateISO);
+    const day2 = String(ReturnDate.getDate()).padStart(2, "0");
+    const month2 = String(ReturnDate.getMonth() + 1).padStart(2, "0");
+    const year2 = ReturnDate.getFullYear();
+    const formattedDate2 = `${year2}-${month2}-${day2}`;
+
+    // Reemplazar las fechas originales con las fechas formateadas
+    existingLoan.Loan_Date = formattedDate;
+    existingLoan.Actual_Return_Date = formattedDate1;
+    existingLoan.Expected_Return_Date = formattedDate2;
+
+    // Enviar el préstamo en la respuesta JSON
+    res.status(200).json(existingLoan);
+      } else {
+        
+        res.status(404).json({ message: 'prestamo no encontrado' });
+      }
+    } catch (error) {
+     
+      console.error("Error al obtener el prestamo por ID:", error);
+      res.status(500).json({ message: "Error al obtener el prestamo" });
+    }
+  });
 
   
 

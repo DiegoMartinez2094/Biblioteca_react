@@ -106,7 +106,6 @@ db.createCollection("loan",{
         "Expected_Return_Date",
         "Loan_Status",
         "Physical_Condition_Before",
-        "Physical_Condition_After"
       ],
       properties: { 
         Loan_ID: {

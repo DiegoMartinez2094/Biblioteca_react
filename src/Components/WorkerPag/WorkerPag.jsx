@@ -369,10 +369,11 @@ export default function WorkerPag() {
           setDevice_cost("");
           setDevice_status("");
           setDevice_comments("");
-        } else {
-          alert("id libro no encontrado");
-          setFoundDevice(null);
-        }
+        } 
+      }
+      else {
+        alert("id libro no encontrado");
+        setFoundDevice(null);
       }
     } catch (error) {
       console.error("Error al realizar la solicitud:", error);
@@ -558,7 +559,6 @@ export default function WorkerPag() {
       return;
     }
 
-    
       // Verificar si el prestamo ya está registrado
       const existingLoan = await fetch(
         `http://${config.hostname}:${config.port}/api/verificarLoan_ID`,
@@ -622,6 +622,56 @@ export default function WorkerPag() {
     }
   };
 
+
+  const onDeleteLoanClick = async () => {
+    if (!Loan_ID) {
+      alert("Por favor, ingrese un id de prestamo");
+      return;
+    }
+    try {
+       const existingLoan = await fetch(`http://${config.hostname}:${config.port}/api/verificarLoan_ID`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ Loan_ID: parseInt(Loan_ID) }),
+      }
+    );
+
+    if (existingLoan.status === 200) {
+      const LoanDataDelete = await fetch(
+        `http://${config.hostname}:${config.port}/api/eliminarLoanPorLoan_ID?Loan_ID=${Loan_ID}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (LoanDataDelete.status === 200) {
+        alert("prestamo eliminado correctamente");
+        setLoan_ID("");
+        setUser_ID("");
+        setDevice_id("");
+        setLoan_Date("");
+        setExpected_Return_Date("");
+        setLoan_Status("");
+        setLoan_Comments("");
+        setPhysical_Condition_Before("");
+        setPhysical_Condition_After("");
+        setActual_Return_Date("");
+      } 
+    }else{
+      alert("id prestamo no encontrado");
+      setFoundDevice(null);
+    }
+    } catch (error) {
+      console.error("Error al realizar la solicitud:", error);
+    }
+  };
+
   const onSearchLoanClick = async () => {
     if (!Loan_ID) {
       alert("Por favor, ingrese un Id de prestamo");
@@ -657,54 +707,6 @@ export default function WorkerPag() {
       } else {
         alert("Id de prestamo no encontrado");
         setFoundLoan(null);
-      }
-    } catch (error) {
-      console.error("Error al realizar la solicitud:", error);
-    }
-  };
-
-  const onDeleteLoanClick = async () => {
-    if (!Loan_ID) {
-      alert("Por favor, ingrese un Id de prestamo");
-      return;
-    }
-    try {
-      const Loan_IDExistsResponse = await fetch(
-        `http://${config.hostname}:${config.port}/api/verificarLoan_ID`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ Loan_ID }),
-        }
-      );
-
-      if (Loan_IDExistsResponse.status === 200) {
-        const userDataDelete = await fetch(
-          `http://${config.hostname}:${config.port}/api/eliminarLoanPorLoan_ID?Loan_ID=${Loan_ID}`,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (userDataDelete.status === 200) {
-          alert("Prestamo eliminado exitosamente");
-          setLoan_ID("");
-          setUser_ID("");
-          setDevice_id("");
-          setLoan_Date("");
-          setExpected_Return_Date("");
-          setLoan_Status("");
-          setPhysical_Condition_Before("");
-          setPhysical_Condition_After("");
-        } else {
-          alert("Id de prestamo no encontrado no encontrado");
-          setFoundLoan(null);
-        }
       }
     } catch (error) {
       console.error("Error al realizar la solicitud:", error);

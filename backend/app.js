@@ -411,6 +411,22 @@ app.get("/api/obtenerDevices", async (req, res) => {
     }
   });
 
+  app.delete("/api/eliminarLoanPorLoan_ID", async (req, res) => {
+    try {
+      const { Loan_ID } = req.query; 
+      console.log(Loan_ID);
+      const result = await loans.deleteOne({ Loan_ID: parseInt(Loan_ID) });
+      if (result.deletedCount > 0) { 
+        res.status(200).json({ message: 'prestamo eliminado correctamente' });
+      } else {
+        res.status(404).json({ message: 'prestamo no encontrado' });
+      }
+    } catch (error) {
+      
+      console.error("Error al eliminar el prestamo por ID:", error);
+      res.status(500).json({ message: "Error al eliminar el prestamo por ID" });
+    }
+  });
 
 
   

@@ -13,6 +13,7 @@ export default config;
   const db = await con();
   const usuarios = db.collection('user');
   const devices = db.collection('device');
+  const loans =db.collection('loan');
 
   app.use(express.json());
 
@@ -366,7 +367,56 @@ app.get("/api/obtenerDevices", async (req, res) => {
 });
 
 //--------------------------------------------------------------------------------------------------------------------------------
-  app.listen(config.port, config.hostname, () => {
+  //PRESTAMOS
+  app.post('/api/registrarLoan', async (req, res) => {
+    try {
+      const {   Loan_ID, User_ID, Device_id, Loan_Date, Expected_Return_Date, Loan_Status, Actual_Return_Date, Physical_Condition_Before, Physical_Condition_After, Loan_Comments   } = req.body;
+      
+      const DataLoan = {
+        Loan_ID,
+        User_ID,
+        Device_id,
+        Loan_Date,
+        Expected_Return_Date,
+        Loan_Status,
+        Actual_Return_Date,
+        Physical_Condition_Before,
+        Physical_Condition_After,
+        Loan_Comments
+      };
+    
+      await loans.insertOne(DataLoan);
+  
+      // Enviar una respuesta de éxito
+      res.status(201).json({ message: 'Prestamo registrado correctamente' });
+    } catch (error) {
+      // Manejar errores, si los hay
+      console.error('Error al registrar el prestamo:', error);
+      res.status(500).json({ message: 'Error al registrar prestamo' });
+    }
+  });
+
+  app.post('/api/verificarLoan_ID', async (req, res) => {
+    try {
+      const { Loan_ID } = req.body;
+      const existingLoan = await loans.findOne({ Loan_ID });
+      if (existingLoan) {
+        res.status(200).json(existingLoan);
+      } else {
+        res.status(404).json({ message: 'prestamo no registrado' });
+      }
+    } catch (error) {
+      console.error('Error al verificar prestamo app.js:', error);
+      res.status(500).json({ message: 'Error al verificar prestamo app.js' });
+    }
+  });
+
+
+
+  
+
+//------------------------------------------------------------------------------------------------------------------------------------
+app.listen(config.port, config.hostname, () => {
 
     console.log(`Servidor iniciado en http://${config.hostname}:${config.port}`);
   });

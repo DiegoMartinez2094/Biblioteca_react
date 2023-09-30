@@ -535,7 +535,6 @@ export default function WorkerPag() {
       !Loan_Date ||
       !Expected_Return_Date ||
       !Loan_Status ||
-      !Loan_Comments ||
       !Physical_Condition_Before
      
     ) {
@@ -543,18 +542,52 @@ export default function WorkerPag() {
       return;
     }
 
+    const loanDate = new Date(Loan_Date);
+    const expectedReturnDate = new Date(Expected_Return_Date);
+    const actualReturnDate = new Date(Actual_Return_Date);
+  
+    // Validar que Loan_Date sea anterior a Expected_Return_Date
+    if (loanDate >= expectedReturnDate) {
+      alert("La fecha de préstamo debe ser anterior a la fecha esperada devolucion.");
+      return;
+    }
+  
+    // Validar que Actual_Return_Date sea igual o posterior a Expected_Return_Date
+    if (actualReturnDate < expectedReturnDate) {
+      alert("La fecha real devolucion debe ser igual o posterior a la fecha de devolución esperada.");
+      return;
+    }
+
+    
+      // Verificar si el prestamo ya está registrado
+      const existingLoan = await fetch(
+        `http://${config.hostname}:${config.port}/api/verificarLoan_ID`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ Loan_ID: parseInt(Loan_ID) }),
+        }
+      );
+
+      if (existingLoan.status === 200) {
+        alert("Id prestamo registrado anteriormente ");
+        return;
+      }
+
     try {
       const loanData = {
-        Loan_ID,
-        User_ID,
-        Device_id,
-        Loan_Date,
-        Expected_Return_Date,
+        Loan_ID: parseInt(Loan_ID),
+        User_ID: parseInt(User_ID),
+        Device_id: parseInt(Device_id),
+        Loan_Date: new Date(Loan_Date),
+        Expected_Return_Date: new Date(Expected_Return_Date),
         Loan_Status,
-        Actual_Return_Date,
+        Actual_Return_Date: new Date(Actual_Return_Date),
         Physical_Condition_Before,
         Physical_Condition_After,
-        Actual_Return_Date
+        Loan_Comments
       };
 
       const response = await fetch(

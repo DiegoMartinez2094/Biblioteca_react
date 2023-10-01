@@ -440,19 +440,19 @@ app.get("/api/obtenerDevices", async (req, res) => {
 
     // Convertir las fechas a formato "dd-mm-aaaa"
     const loanDate = new Date(loanDateISO);
-    const day = String(loanDate.getDate()).padStart(2, "0");
+    const day = String(loanDate.getDate()+1 ).padStart(2, "0");
     const month = String(loanDate.getMonth() + 1).padStart(2, "0");
     const year = loanDate.getFullYear();
     const formattedDate = `${year}-${month}-${day}`;
 
     const ExpectDate = new Date(ExpectDateISO);
-    const day1 = String(ExpectDate.getDate()).padStart(2, "0");
-    const month1 = String(ExpectDate.getMonth() + 1).padStart(2, "0");
+    const day1 = String(ExpectDate.getDate()+1).padStart(2, "0");
+    const month1 = String(ExpectDate.getMonth() + 1 ).padStart(2, "0");
     const year1 = ExpectDate.getFullYear();
     const formattedDate1 = `${year1}-${month1}-${day1}`;
 
     const ReturnDate = new Date(ReturnDateISO);
-    const day2 = String(ReturnDate.getDate()).padStart(2, "0");
+    const day2 = String(ReturnDate.getDate()+1).padStart(2, "0");
     const month2 = String(ReturnDate.getMonth() + 1).padStart(2, "0");
     const year2 = ReturnDate.getFullYear();
     const formattedDate2 = `${year2}-${month2}-${day2}`;
@@ -475,6 +475,40 @@ app.get("/api/obtenerDevices", async (req, res) => {
     }
   });
 
+  
+  app.put("/api/editarLoanPorLoan_ID", async (req, res) => {
+    try {
+      const { Loan_ID } = req.query; 
+      const { User_ID, Device_id, Loan_Date, Loan_Status, Actual_Return_Date, Expected_Return_Date, Physical_Condition_Before, Physical_Condition_After, Loan_Comments } = req.body; // Obtén los datos a actualizar desde el cuerpo de la solicitud
+      
+      const Loan_IDInt = parseInt(Loan_ID);
+      console.log("id encontrado: ", Loan_IDInt);
+      const result = await loans.updateOne({ Loan_ID: Loan_IDInt }, {
+   
+        $set: {
+          Loan_ID:parseInt(Loan_ID),
+          User_ID,
+          Device_id,
+          Loan_Date,
+          Expected_Return_Date,
+          Loan_Status,
+          Actual_Return_Date,
+          Physical_Condition_Before,
+          Physical_Condition_After,
+          Loan_Comments
+        },
+      });
+  
+      if (result.modifiedCount > 0) {
+        res.status(200).json({ message: 'prestamo editado correctamente' });
+      } else {
+        res.status(404).json({ message: 'prestamo no encontrado' });
+      }
+    } catch (error) {
+      console.error("Error al editar el prestamo por id del prestamo:", error);
+      res.status(500).json({ message: "Error al editar el prestamo por id del prestamo" });
+    }
+  });
   
 
 //------------------------------------------------------------------------------------------------------------------------------------

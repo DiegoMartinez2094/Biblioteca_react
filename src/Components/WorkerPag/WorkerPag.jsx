@@ -17,14 +17,12 @@ export default function WorkerPag() {
   function toggleFormularioPrestamos() {
     setFormularioPrestamosVisible(!formularioPrestamosVisible);
   }
-
   function toggleFormularioUsuario() {
     setFormularioUsuarioVisible(!formularioUsuarioVisible);
   }
   function toggleFormularioLibro() {
     setFormularioLibroVisible(!formularioLibroVisible);
   }
-
   function togglelistadoLibros() {
     setlistadoLibrosVisible(!listadoLibrosVisible);
   }
@@ -486,18 +484,15 @@ export default function WorkerPag() {
   const onUser_IDChange = (e) => {
     setUser_ID(e.target.value);
   };
-
   const onLoan_DateChange = (e) => {
     setLoan_Date(e.target.value);
   };
   const onActual_Return_DateChange = (e) => {
     setActual_Return_Date(e.target.value);
   };
-
   const onExpected_Return_DateChange = (e) => {
     setExpected_Return_Date(e.target.value);
   };
-
   const onLoan_StatusChange = (e) => {
     setLoan_Status(e.target.value);
   };
@@ -713,42 +708,27 @@ export default function WorkerPag() {
   
 
   const onUpdateLoanClick = async () => {
-    if (
-      !Loan_ID ||
-      !User_ID ||
-      !Device_id ||
-      !Loan_Date ||
-      !Expected_Return_Date ||
-      !Loan_Status ||
-      !Loan_Comments ||
-      !Physical_Condition_Before ||
-      !Physical_Condition_After
-    ) {
+    if (!Loan_ID ) {
       alert("Por favor, complete todos los campos.");
       return;
     }
     try {
-      const Loan_IDdExistsResponse = await fetch(
-        `http://${config.hostname}:${config.port}/api/verificarLoan_ID`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ Loan_ID }),
-        }
-      );
-
-      if (Loan_IDdExistsResponse.status === 200) {
+      const existingLoan = await fetch(`http://${config.hostname}:${config.port}/api/verificarLoan_ID`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ Loan_ID: parseInt(Loan_ID) }),
+      });
+      if (existingLoan.status === 200) {
         const LoanDataUpdate = await fetch(
-          `http://${config.hostname}:${config.port}/api/editarUsuarioPorLoan_ID?Loan_ID=${Loan_ID}`,
+          `http://${config.hostname}:${config.port}/api/editarLoanPorLoan_ID?Loan_ID=${Loan_ID}`,
           {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              Loan_ID,
               User_ID,
               Device_id,
               Loan_Date,
@@ -757,6 +737,7 @@ export default function WorkerPag() {
               Actual_Return_Date,
               Physical_Condition_Before,
               Physical_Condition_After,
+              Loan_Comments
             }),
           }
         );
@@ -769,8 +750,10 @@ export default function WorkerPag() {
           setLoan_Date("");
           setExpected_Return_Date("");
           setLoan_Status("");
+          setLoan_Comments("");
           setPhysical_Condition_Before("");
           setPhysical_Condition_After("");
+          setActual_Return_Date("");
         } else {
           alert("Id del prestamo no encontrado");
           setFoundLoan(null);
@@ -1182,6 +1165,7 @@ export default function WorkerPag() {
               <option value="">Estado prestamo</option>
               <option value="pendiente">pendiente</option>
               <option value="entregado">entregado</option>
+              <option value="entregado">reservado</option>
             </select>
           </div>
 

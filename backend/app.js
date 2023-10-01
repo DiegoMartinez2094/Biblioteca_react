@@ -22,7 +22,7 @@ export default config;
 
   //------------------------------------------------------------------------------------------------------------------------------------
 
-  //uSUARIOS/
+  //USUARIOS/
 
   app.get("/api/obtenerUltimoUserId", async (req, res) => {
     try {
@@ -205,11 +205,11 @@ export default config;
     const {  Device_id,Device_name, Description_device, Device_category, Device_cost, Device_status, Device_comments  } = req.body;
     
     const DataBook = {
-      Device_id,
+      Device_id: parseInt(Device_id),
       Device_name,
       Description_device,
       Device_category,
-      Device_cost,
+      Device_cost: parseInt(Device_cost),
       Device_status,
       Device_comments,
     };
@@ -479,12 +479,9 @@ app.get("/api/obtenerDevices", async (req, res) => {
   app.put("/api/editarLoanPorLoan_ID", async (req, res) => {
     try {
       const { Loan_ID } = req.query; 
-      const { User_ID, Device_id, Loan_Date, Loan_Status, Actual_Return_Date, Expected_Return_Date, Physical_Condition_Before, Physical_Condition_After, Loan_Comments } = req.body; // Obtén los datos a actualizar desde el cuerpo de la solicitud
-      
+      const { User_ID, Device_id, Loan_Date, Loan_Status, Actual_Return_Date, Expected_Return_Date, Physical_Condition_Before, Physical_Condition_After, Loan_Comments } = req.body; 
       const Loan_IDInt = parseInt(Loan_ID);
-      console.log("id encontrado: ", Loan_IDInt);
       const result = await loans.updateOne({ Loan_ID: Loan_IDInt }, {
-   
         $set: {
           Loan_ID:parseInt(Loan_ID),
           User_ID,

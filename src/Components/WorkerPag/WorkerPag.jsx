@@ -264,7 +264,7 @@ export default function WorkerPag() {
       } else {
         // Manejar errores aquí
         console.error("Error al registrar Libro");
-        alert("Se produjo un error en el registro del libro.");
+        alert("Se produjo un error en el registro del libro, verifica que el Id y el costo sean un numero entero");
 
         setDevice_id("");
         setDevice_name("");

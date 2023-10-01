@@ -135,7 +135,7 @@ db.createCollection("loan",{
         Loan_Status : {
           bsonType: "string",
           description: "Loan_Status could be of string type and is required",
-          enum: ["pendiente", "entregado"],
+          enum: ["pendiente", "entregado", "reservado"],
         },
         Loan_Comments : {
           bsonType: "string",

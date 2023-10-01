@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { con } from './db/Atlas.js';
+import * as cookie from 'cookie';
 import cors from 'cors'; // Importa el middleware CORS
 
 dotenv.config();
@@ -109,8 +110,23 @@ export default config;
             userType = 'usuario';
           }
   
+          // Crear una cookie 
+          const userData = {
+            name: existingUser.User_name,
+            userType: userType,
+          };
+  
+          const cookieOptions = {
+            httpOnly: true, // La cookie solo es accesible desde el servidor
+            maxAge: 3600 * 24 * 7, // La cookie expirará en 7 días (ajusta esto según tus necesidades)
+          };
+  
+          // Establecer la cookie en la respuesta
+          res.setHeader('Set-Cookie', cookie.serialize('tipo de usuario', JSON.stringify(userData), cookieOptions));
+  
           // Enviar el tipo de usuario en la respuesta JSON
-          res.status(200).json({ userType });
+          res.status(200).json({   name: existingUser.User_name,
+            userType: userType,});
         } else {
           res.status(401).json({ message: 'Correo o Contraseña incorrecta' });
         }

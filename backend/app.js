@@ -13,6 +13,7 @@ export default config;
   const db = await con();
   const usuarios = db.collection('user');
   const devices = db.collection('device');
+  const loans =db.collection('loan');
 
   app.use(express.json());
 
@@ -21,7 +22,7 @@ export default config;
 
   //------------------------------------------------------------------------------------------------------------------------------------
 
-  //uSUARIOS/
+  //USUARIOS/
 
   app.get("/api/obtenerUltimoUserId", async (req, res) => {
     try {
@@ -204,11 +205,11 @@ export default config;
     const {  Device_id,Device_name, Description_device, Device_category, Device_cost, Device_status, Device_comments  } = req.body;
     
     const DataBook = {
-      Device_id,
+      Device_id: parseInt(Device_id),
       Device_name,
       Description_device,
       Device_category,
-      Device_cost,
+      Device_cost: parseInt(Device_cost),
       Device_status,
       Device_comments,
     };
@@ -349,12 +350,166 @@ app.put("/api/editarDevicePorId", async (req, res) => {
   }
 });
 
+app.get("/api/obtenerDevices", async (req, res) => {
+  try {
+    const device = await devices.find({}).toArray();
+    if (device) {
+      res.status(200).json(device);
+    } else {
+      console.log("No se encontraron dispositivos");
+      res.status(200).json({ message: "No se encontraron dispositivos" });
+    }
+  } catch (error) {
+    console.error("Error al obtener los dispositivos:", error);
+    res.status(500).json({ message: "Error al obtener los dispositivos" });
+  }
+});
 
+//--------------------------------------------------------------------------------------------------------------------------------
+  //PRESTAMOS
+  app.post('/api/registrarLoan', async (req, res) => {
+    try {
+      const {   Loan_ID, User_ID, Device_id, Loan_Date, Expected_Return_Date, Loan_Status, Actual_Return_Date, Physical_Condition_Before, Physical_Condition_After, Loan_Comments   } = req.body;
+      
+      const DataLoan = {
+        Loan_ID,
+        User_ID,
+        Device_id,
+        Loan_Date,
+        Expected_Return_Date,
+        Loan_Status,
+        Actual_Return_Date,
+        Physical_Condition_Before,
+        Physical_Condition_After,
+        Loan_Comments
+      };
+    
+      await loans.insertOne(DataLoan);
+  
+      // Enviar una respuesta de éxito
+      res.status(201).json({ message: 'Prestamo registrado correctamente' });
+    } catch (error) {
+      // Manejar errores, si los hay
+      console.error('Error al registrar el prestamo:', error);
+      res.status(500).json({ message: 'Error al registrar prestamo' });
+    }
+  });
 
+  app.post('/api/verificarLoan_ID', async (req, res) => {
+    try {
+      const { Loan_ID } = req.body;
+      const existingLoan = await loans.findOne({ Loan_ID });
+      if (existingLoan) {
+        res.status(200).json(existingLoan);
+      } else {
+        res.status(404).json({ message: 'prestamo no registrado' });
+      }
+    } catch (error) {
+      console.error('Error al verificar prestamo app.js:', error);
+      res.status(500).json({ message: 'Error al verificar prestamo app.js' });
+    }
+  });
+
+  app.delete("/api/eliminarLoanPorLoan_ID", async (req, res) => {
+    try {
+      const { Loan_ID } = req.query; 
+      const result = await loans.deleteOne({ Loan_ID: parseInt(Loan_ID) });
+      if (result.deletedCount > 0) { 
+        res.status(200).json({ message: 'prestamo eliminado correctamente' });
+      } else {
+        res.status(404).json({ message: 'prestamo no encontrado' });
+      }
+    } catch (error) {
+      
+      console.error("Error al eliminar el prestamo por ID:", error);
+      res.status(500).json({ message: "Error al eliminar el prestamo por ID" });
+    }
+  });
+
+  app.get("/api/obtenerLoanPorLoan_ID", async (req, res) => {
+    try {
+      const { Loan_ID } = req.query; 
+      const Loan_IDInt = parseInt(Loan_ID);
+      const existingLoan = await loans.findOne({ Loan_ID: Loan_IDInt });
+
+      if (existingLoan) {
+           // Formatear las fechas
+    const loanDateISO = existingLoan.Loan_Date;
+    const ExpectDateISO = existingLoan.Actual_Return_Date;
+    const ReturnDateISO = existingLoan.Expected_Return_Date;
+
+    // Convertir las fechas a formato "dd-mm-aaaa"
+    const loanDate = new Date(loanDateISO);
+    const day = String(loanDate.getDate()+1 ).padStart(2, "0");
+    const month = String(loanDate.getMonth() + 1).padStart(2, "0");
+    const year = loanDate.getFullYear();
+    const formattedDate = `${year}-${month}-${day}`;
+
+    const ExpectDate = new Date(ExpectDateISO);
+    const day1 = String(ExpectDate.getDate()+1).padStart(2, "0");
+    const month1 = String(ExpectDate.getMonth() + 1 ).padStart(2, "0");
+    const year1 = ExpectDate.getFullYear();
+    const formattedDate1 = `${year1}-${month1}-${day1}`;
+
+    const ReturnDate = new Date(ReturnDateISO);
+    const day2 = String(ReturnDate.getDate()+1).padStart(2, "0");
+    const month2 = String(ReturnDate.getMonth() + 1).padStart(2, "0");
+    const year2 = ReturnDate.getFullYear();
+    const formattedDate2 = `${year2}-${month2}-${day2}`;
+
+    // Reemplazar las fechas originales con las fechas formateadas
+    existingLoan.Loan_Date = formattedDate;
+    existingLoan.Actual_Return_Date = formattedDate1;
+    existingLoan.Expected_Return_Date = formattedDate2;
+
+    // Enviar el préstamo en la respuesta JSON
+    res.status(200).json(existingLoan);
+      } else {
+        
+        res.status(404).json({ message: 'prestamo no encontrado' });
+      }
+    } catch (error) {
+     
+      console.error("Error al obtener el prestamo por ID:", error);
+      res.status(500).json({ message: "Error al obtener el prestamo" });
+    }
+  });
 
   
-//--------------------------------------------------------------------------------------------------------------------------------
-  app.listen(config.port, config.hostname, () => {
+  app.put("/api/editarLoanPorLoan_ID", async (req, res) => {
+    try {
+      const { Loan_ID } = req.query; 
+      const { User_ID, Device_id, Loan_Date, Loan_Status, Actual_Return_Date, Expected_Return_Date, Physical_Condition_Before, Physical_Condition_After, Loan_Comments } = req.body; 
+      const Loan_IDInt = parseInt(Loan_ID);
+      const result = await loans.updateOne({ Loan_ID: Loan_IDInt }, {
+        $set: {
+          Loan_ID:parseInt(Loan_ID),
+          User_ID,
+          Device_id,
+          Loan_Date,
+          Expected_Return_Date,
+          Loan_Status,
+          Actual_Return_Date,
+          Physical_Condition_Before,
+          Physical_Condition_After,
+          Loan_Comments
+        },
+      });
+  
+      if (result.modifiedCount > 0) {
+        res.status(200).json({ message: 'prestamo editado correctamente' });
+      } else {
+        res.status(404).json({ message: 'prestamo no encontrado' });
+      }
+    } catch (error) {
+      console.error("Error al editar el prestamo por id del prestamo:", error);
+      res.status(500).json({ message: "Error al editar el prestamo por id del prestamo" });
+    }
+  });
+  
+
+//------------------------------------------------------------------------------------------------------------------------------------
+app.listen(config.port, config.hostname, () => {
 
     console.log(`Servidor iniciado en http://${config.hostname}:${config.port}`);
   });

@@ -1,36 +1,53 @@
-#Device_id, #Device_name, #Device_category, #Device_status, #Device_cost, #Device_comments, #Description_device{
-    padding: 5px;
-    margin-bottom: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-    text-align: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
+#User_ID,
+#Loan_ID,
+#Device_id,
+#Device_name,
+#Device_category,
+#Device_status,
+#Device_cost,
+#Device_comments,
+#Loan_Status,
+#Expected_Return_Date,
+#Loan_Date,
+#Physical_Condition_Before,
+#Loan_Comments,
+#Physical_Condition_After,
+#Actual_Return_Date,
+#Description_device {
+  padding: 5px;
+  margin-bottom: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-#container1{
-    margin-top: 7rem;
-    transform: scale(1.40);
-    margin-left: 10%;
-    width: 19rem;
-    padding-left: 10px;
-    padding-right: 10px;
-    background-color: #ffffff;
-    text-align: center; 
-    padding-top: 3px; 
-    border-radius: 10px; 
+#formRegisDevices {
+  margin-top: 7rem;
+  margin-bottom: 10rem;
+  transform: scale(1.4);
+  margin-left: 15%;
+  width: 19rem;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #ffffff;
+  text-align: center;
+  padding-top: 3px;
+  border-radius: 10px;
 }
 
-#container2{
-  margin-top: 5rem;
-  transform: scale(1.40);
-  margin-left: 36%;
+#formRegisUsers {
+  margin-top: 4rem;
+  margin-bottom: 13rem;
+  transform: scale(1.4);
+  margin-left: 56%;
   max-width: 19rem;
   padding-left: 10px;
   padding-right: 10px;
   background-color: #ffffff;
-  text-align: center; 
-  padding-top: 3px; 
+  text-align: center;
+  padding-top: 3px;
   border-radius: 10px;
 }
 
@@ -42,14 +59,61 @@
   cursor: pointer;
   font-size: 40px;
   transition: background-color 0.5s ease;
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
   margin-top: -20px;
   margin-left: 10rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   border-radius: 10%;
 }
 
+#bookList {
+  max-width: 130rem;
+  min-width: 10rem;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #ffffff;
+  text-align: center;
+  padding-top: 3px;
+  border-radius: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 7rem;
+}
+
+#formRegisLoans {
+  margin-top: 12rem;
+  margin-bottom: 12rem;
+  transform: scale(1.4);
+  margin-left: 75%;
+  max-width: 19rem;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #ffffff;
+  text-align: center;
+  padding-top: 3px;
+  border-radius: 10px;
+}
 
 #inscLibro:hover {
-    background-color: #5162f5;
-  }
+  background-color: #5162f5;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table,
+th,
+td {
+  border: 1px solid #ccc;
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}

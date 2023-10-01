@@ -9,6 +9,7 @@ import UserPag from './Components/UserPag/UserPag.jsx'
 import RegistroFormAdm from './Components/RegistroAdm/registroAdm.jsx'
 import NotFound from './Components/NotFound/NotFound.jsx'
 import WorkerPag from './Components/WorkerPag/WorkerPag.jsx'
+import SessionExpired from './Components/sessionExpired/SessionExprired.jsx'
 
 const router =createBrowserRouter([
   {
@@ -39,6 +40,11 @@ const router =createBrowserRouter([
     path: '/WorkerPag',
     element: <WorkerPag/>,
   },
+  {
+    path: '/SessionExpired',
+    element: <SessionExpired/>,
+  }
+
 ])
 
 

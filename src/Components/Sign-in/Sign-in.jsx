@@ -48,15 +48,22 @@ const onIngresoClick = async () => {
 
     if (emailycontraseñaExistsResponse.ok) {
       const responseData = await emailycontraseñaExistsResponse.json();
-      console.log(responseData);
+   
       const userType = responseData.userType;
-      const name = responseData.name
+      const User_name = responseData.User_name;
+      const User_id = responseData.User_id;
  
 
-      // Almacena la cookie en el navegador
-      document.cookie = `nombre de usuario=${JSON.stringify(name)}; path=/`;
-      document.cookie = `tipo de usuario=${JSON.stringify(responseData)}; path=/`;
-   
+      const maxAgeInSeconds =30; //segundo de expiracion de la cookie (1hora)
+
+      // Calcula la fecha de expiración
+      const expirationDate = new Date();
+      expirationDate.setTime(expirationDate.getTime() + maxAgeInSeconds * 1000);
+      
+      // Almacena la cookie en el navegador con max-age
+      document.cookie = `User_id=${JSON.stringify(User_id)}; path=/; max-age=${maxAgeInSeconds}; expires=${expirationDate.toUTCString()}`;
+      document.cookie = `User_name=${JSON.stringify(User_name)}; path=/; max-age=${maxAgeInSeconds}; expires=${expirationDate.toUTCString()}`;
+      
       if (userType === "administrador") {
         setRedirectAdmPag(true);
       } else if (userType === "trabajador") {

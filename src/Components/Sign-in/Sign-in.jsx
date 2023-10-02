@@ -54,7 +54,7 @@ const onIngresoClick = async () => {
       const User_id = responseData.User_id;
  
 
-      const maxAgeInSeconds =30; //segundo de expiracion de la cookie (1hora)
+      const maxAgeInSeconds =3600; //segundo de expiracion de la cookie (1hora)
 
       // Calcula la fecha de expiración
       const expirationDate = new Date();

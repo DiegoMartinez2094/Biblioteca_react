@@ -897,6 +897,7 @@ export default function WorkerPag() {
               <option value="">Seleccione el estado</option>
               <option value="disponible">disponible</option>
               <option value="prestado">prestado</option>
+              <option value="reservado">reservado</option>
             </select>
             <br />
             <br />

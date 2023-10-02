@@ -1165,7 +1165,7 @@ export default function WorkerPag() {
               <option value="">Estado prestamo</option>
               <option value="pendiente">pendiente</option>
               <option value="entregado">entregado</option>
-              <option value="entregado">reservado</option>
+              <option value="reservado">reservado</option>
             </select>
           </div>
 

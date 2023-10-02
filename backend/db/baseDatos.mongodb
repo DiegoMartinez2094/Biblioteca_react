@@ -79,7 +79,7 @@ db.createCollection("device",{
         Device_status: {
           bsonType: "string",
           description: "Device_status could be of string type and is required",
-          enum: ["disponible", "prestado"],
+          enum: ["disponible", "prestado", "reservado"],
         },
         Device_cost: {
           bsonType: "int",

@@ -152,7 +152,6 @@ export default function UserPag() {
       >
         Cerrar sesión
       </button>
-
       <h1 id="holausuario">Hola, {userName}</h1>
       <div>
         {" "}
@@ -168,19 +167,24 @@ export default function UserPag() {
         onClick={onShowTableclick}
         style={{ marginLeft: "100px", fontSize: "30px" }}
       >
-        Refrescar tabla
+        Refrescar lista
       </button>
-
       {listadoLibrosVisible && (
         <div id="deviceList">
           {devices.map((device) => (
             <div key={device._id} class="container">
               <div class="book">
-                <h5 id="resumen">
-                {device.Description_device}
-                </h5>
-                <button id="btn_prestar">prestar</button>
-                <button id="btn_reservar">reservar</button>
+                <h5 id="resumen">{device.Description_device}</h5>
+
+                
+
+                <button class="button">
+                  <span class="button_lg">
+                    <span class="button_sl"></span>
+                    <span class="button_text">prestar</span>
+                  </span>
+                </button>
+                
                 <div class="cover">
                   <h2>{device.Device_name}</h2>
                   <p>{device.Device_category}</p>
@@ -190,6 +194,7 @@ export default function UserPag() {
           ))}
         </div>
       )}
+      )
     </>
   );
 }

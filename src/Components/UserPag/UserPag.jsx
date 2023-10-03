@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import Draggable from "react-draggable";
 import "./UserPag.css";
 
 export default function UserPag() {
   const [userName, setUserName] = useState("");
   const [userId, setUserId] = useState("");
 
-
-
   //------------------------------------------------------------------------------------------------------------------------------------------------------------
-  //uso de cokkies 
-  
-  // Función para analizar las cookies y obtener el nombre de usuario y el id
+  //uso de cokkies
+
+  // Función para analizar las cookies y obtener el nombre de usuario
   const getUserNameFromCookie = () => {
     const cookies = document.cookie.split("; ");
     for (const cookie of cookies) {
@@ -20,18 +19,21 @@ export default function UserPag() {
         return decodeURIComponent(value);
       }
     }
-
-    const getUserIdFromCookie = () => {
-      const cookies = document.cookie.split("; ");
-      for (const cookie of cookies) {
-        const [Id, value] = cookie.split("=");
-        if (Id === "User_id") {
-          return decodeURIComponent(value);
-        }
-      }
-    };
     return "";
   };
+
+  // Función para analizar las cookies y obtener el id de usuario
+  const getUserIdFromCookie = () => {
+    const cookies = document.cookie.split("; ");
+    for (const cookie of cookies) {
+      const [name, value] = cookie.split("=");
+      if (name === "User_id") {
+        return decodeURIComponent(value);
+      }
+    }
+    return "";
+  };
+
   // Función para verificar si la cookie ha caducado
   const isCookieActive = () => {
     const cookies = document.cookie.split("; ");
@@ -44,6 +46,7 @@ export default function UserPag() {
     }
     return false; // La cookie no está presente
   };
+
   // Obtiene la función de navegación desde React Router
   const navigate = useNavigate();
   // Función para eliminar todas las cookies
@@ -59,6 +62,8 @@ export default function UserPag() {
     const nameFromCookie = getUserNameFromCookie();
     setUserName(nameFromCookie);
 
+    const UserIdFromCookie = getUserIdFromCookie();
+    setUserId(UserIdFromCookie);
     // Verificar si la cookie ha caducado y redirigir al componente SessionExpired
     if (!isCookieActive()) {
       navigate("/SessionExpired"); // Redirige al componente SessionExpired
@@ -88,7 +93,6 @@ export default function UserPag() {
   const onDevice_idChange = (e) => {
     setDevice_id(e.target.value);
   };
-
 
   useEffect(() => {
     loadDeviceFields(); // Cargar los campos de entrada cuando se actualice
@@ -127,34 +131,15 @@ export default function UserPag() {
   const [Loan_Date, setLoan_Date] = useState("");
   const [Expected_Return_Date, setExpected_Return_Date] = useState("");
   const [Loan_Status, setLoan_Status] = useState("");
- 
-  const [Physical_Condition_Before, setPhysical_Condition_Before] =useState("");
-  const [Physical_Condition_After, setPhysical_Condition_After] = useState("");
-  const [Actual_Return_Date, setActual_Return_Date] = useState("");
 
   const [foundLoan, setFoundLoan] = useState(null);
 
-  const onLoan_IDChange = (e) => {
-    setLoan_ID(e.target.value);
-  };
-  const onUser_IDChange = (e) => {
-    setUser_ID(e.target.value);
-  };
   const onLoan_DateChange = (e) => {
     setLoan_Date(e.target.value);
   };
-  const onActual_Return_DateChange = (e) => {
-    setActual_Return_Date(e.target.value);
-  };
+
   const onExpected_Return_DateChange = (e) => {
     setExpected_Return_Date(e.target.value);
-  };
-  const onLoan_StatusChange = (e) => {
-    setLoan_Status(e.target.value);
-  };
-
-  const onPhysical_Condition_AfterChange = (e) => {
-    setPhysical_Condition_After(e.target.value);
   };
 
   useEffect(() => {
@@ -162,31 +147,20 @@ export default function UserPag() {
   }, [foundLoan]);
 
   const loadLoanFields = () => {
-    setLoan_ID(foundLoan ? foundLoan.Loan_ID : "");
-    setUser_ID(foundLoan ? foundLoan.User_ID : "");
     setDevice_id(foundLoan ? foundLoan.Device_id : "");
     setLoan_Date(foundLoan ? foundLoan.Loan_Date : "");
     setExpected_Return_Date(foundLoan ? foundLoan.Expected_Return_Date : "");
     setLoan_Status(foundLoan ? foundLoan.Loan_Status : "");
-    setActual_Return_Date(foundLoan ? foundLoan.Actual_Return_Date : "");
   };
 
   const onRegistroLoanClick = async () => {
-    if (
-      !Loan_ID ||
-      !User_ID ||
-      !Device_id ||
-      !Loan_Date ||
-      !Expected_Return_Date ||
-      !Loan_Status
-    ) {
+    if (!Device_id || !Loan_Date || !Expected_Return_Date) {
       alert("Por favor, complete todos los campos.");
       return;
     }
 
     const loanDate = new Date(Loan_Date);
     const expectedReturnDate = new Date(Expected_Return_Date);
-    const actualReturnDate = new Date(Actual_Return_Date);
 
     // Validar que Loan_Date sea anterior a Expected_Return_Date
     if (loanDate >= expectedReturnDate) {
@@ -196,45 +170,34 @@ export default function UserPag() {
       return;
     }
 
-    // Validar que Actual_Return_Date sea igual o posterior a Expected_Return_Date
-    if (actualReturnDate < expectedReturnDate) {
-      alert(
-        "La fecha real devolucion debe ser igual o posterior a la fecha de devolución esperada."
-      );
-      return;
-    }
-
-    // Verificar si el prestamo ya está registrado
-    const existingLoan = await fetch(
-      `http://${config.hostname}:${config.port}/api/verificarLoan_ID`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ Loan_ID: parseInt(Loan_ID) }),
-      }
+    // obtener el ultimo loan_id
+    const lastLoanIdResponse = await fetch(
+      `http://${config.hostname}:${config.port}/api/obtenerUltimoLoaId`
     );
 
-    if (existingLoan.status === 200) {
-      alert("Id prestamo registrado anteriormente ");
-      return;
+    let newLoan_id = 1; // Valor predeterminado en caso de que no haya registros
+
+    if (lastLoanIdResponse.status === 200) {
+      const lastLoanIdData = await lastLoanIdResponse.json();
+      const lastLoanId = lastLoanIdData.lastLoanId || 0; // Si no hay registros, comenzar desde 0
+     
+      // Incrementar el User_id para el nuevo usuario
+      newLoan_id = lastLoanId + 1;
     }
+    const loanData = {
+      Loan_ID: newLoan_id,
+      User_ID: parseInt(userId),
+      Device_id: parseInt(Device_id),
+      Loan_Date: new Date(Loan_Date),
+      Expected_Return_Date: new Date(Expected_Return_Date),
+      Loan_Status: "prestado",
+      Actual_Return_Date: "",
+      Physical_Condition_Before: "",
+      Physical_Condition_After: "",
+      Loan_Comments: "",
+    };
 
     try {
-      const loanData = {
-        Loan_ID: parseInt(Loan_ID),
-        User_ID: parseInt(User_ID),
-        Device_id: parseInt(Device_id),
-        Loan_Date: new Date(Loan_Date),
-        Expected_Return_Date: new Date(Expected_Return_Date),
-        Loan_Status,
-        Actual_Return_Date: new Date(Actual_Return_Date),
-        Physical_Condition_Before,
-        Physical_Condition_After,
-        Loan_Comments,
-      };
-
       const response = await fetch(
         `http://${config.hostname}:${config.port}/api/registrarLoan`,
         {
@@ -248,19 +211,13 @@ export default function UserPag() {
 
       if (response.status === 201) {
         alert("prestamo registrado correctamente");
-        setLoan_ID("");
-        setUser_ID("");
+
         setDevice_id("");
         setLoan_Date("");
         setExpected_Return_Date("");
-        setLoan_Status("");
-        setLoan_Comments("");
-        setPhysical_Condition_Before("");
-        setPhysical_Condition_After("");
-        setActual_Return_Date("");
       } else {
         console.error("Error al registrar prestamo registro");
-        alert("Se produjo un error en el registro.");
+        alert("Se produjo un error en el registro. :(");
       }
     } catch (error) {
       console.error("Error al realizar la solicitud:", error);
@@ -281,24 +238,17 @@ export default function UserPag() {
         Cerrar sesión
       </button>
       <div>
-  <h1 id="holausuario">Hola {userName.replace(/"/g, '')} :)</h1>
-</div>
+        <h1 id="holausuario">Hola {userName.replace(/"/g, "")} :)</h1>
+      </div>
 
-      
-      <button
-      className="button"
-        onClick={onShowCardsBooksclick}  
-      >
+      <button className="button" onClick={onShowCardsBooksclick}>
         Mostrar libros
       </button>
 
-        <button
-          className="button"
-          onClick={togglelistadoLibros}
-        >
-          Ocultar libros
-        </button>
-    
+      <button className="button" onClick={togglelistadoLibros}>
+        Ocultar libros
+      </button>
+
       {listadoLibrosVisible && (
         <div id="deviceList">
           {devices.map((device) => (
@@ -326,6 +276,7 @@ export default function UserPag() {
                 </button>
 
                 <div className="cover">
+                  <h3> Id: {device.Device_id}</h3>
                   <h2>{device.Device_name}</h2>
                   <p>{device.Device_category}</p>
                 </div>
@@ -336,110 +287,83 @@ export default function UserPag() {
       )}
 
       {showLoanForm && (
-        <div id="formRegisLoans">
-          <h1>Formulario de prestamo</h1>
-          <div id="register" style={{ display: "flex", alignItems: "center" }}>
-            <label id="one" htmlFor="Loan_ID" style={{ width: "70%" }}>
-              Id del prestamo:{" "}
-            </label>
-            &nbsp;&nbsp;
-            <input
-              type="text"
-              id="Loan_ID"
-              name="Loan_ID"
-              onChange={onLoan_IDChange}
-              value={Loan_ID}
-            />
-          </div>
-          <div id="register" style={{ display: "flex", alignItems: "center" }}>
-            <label id="one" htmlFor="User_ID" style={{ width: "70%" }}>
-              Id del usuario:{" "}
-            </label>
-            &nbsp;&nbsp;
-            <input
-              type="text"
-              id="User_ID"
-              name="User_ID"
-              onChange={onUser_IDChange}
-              value={User_ID}
-            />
-            &nbsp;&nbsp;
-          </div>
-          <div id="register" style={{ display: "flex", alignItems: "center" }}>
-            <label id="one" htmlFor="Device_id" style={{ width: "70%" }}>
-              Id del libro:{" "}
-            </label>
-            &nbsp;&nbsp;
-            <input
-              type="text"
-              id="Device_id"
-              name="Device_id"
-              onChange={onDevice_idChange}
-              value={Device_id}
-            />
-          </div>
-          <div id="register" style={{ display: "flex", alignItems: "center" }}>
-            <label id="one" htmlFor="Loan_Date" style={{ width: "100%" }}>
-              Fecha de prestamo:{" "}
-            </label>
-            &nbsp;&nbsp;
-            <input
-              type="date"
-              id="Loan_Date"
-              name="Loan_Date"
-              onChange={onLoan_DateChange}
-              value={Loan_Date}
-            />
-          </div>
-          <div id="register" style={{ display: "flex", alignItems: "center" }}>
-            <label
-              id="one"
-              htmlFor="Expected_Return_Date"
-              style={{ width: "100%" }}
+        <Draggable>
+          <div id="formRegisLoanss">
+            <h1>Formulario de prestamo</h1>
+
+            <div
+              id="register"
+              style={{ display: "flex", alignItems: "center" }}
             >
-              Fecha esperada devolucion:{" "}
-            </label>
-            &nbsp;&nbsp;
-            <input
-              type="date"
-              id="Expected_Return_Date"
-              name="Expected_Return_Date"
-              onChange={onExpected_Return_DateChange}
-              value={Expected_Return_Date}
-            />
-          </div>
-         
-        
-        
-          <div id="register" style={{ display: "flex", alignItems: "center" }}>
-            <label
-              id="one"
-              htmlFor="Actual_Return_Date"
-              style={{ width: "100%" }}
+              <label
+                id="one"
+                htmlFor="Device_id"
+                style={{ width: "150%", fontSize: "30px" }}
+              >
+                Id del libro:{" "}
+              </label>
+              &nbsp;&nbsp;
+              <input
+                type="text"
+                id="Device_id"
+                name="Device_id"
+                onChange={onDevice_idChange}
+                value={Device_id}
+              />
+            </div>
+            <div
+              id="register"
+              style={{ display: "flex", alignItems: "center" }}
             >
-              Fecha real devolucion:{" "}
-            </label>
-   
-            <input
-              type="date"
-              id="Actual_Return_Date"
-              name="Actual_Return_Date"
-              onChange={onActual_Return_DateChange}
-              value={Actual_Return_Date}
-            />
-            
-          </div>
-          <div>
+              <label
+                id="one"
+                htmlFor="Loan_Date"
+                style={{ width: "150%", fontSize: "30px" }}
+              >
+                Fecha de prestamo:{" "}
+              </label>
+              &nbsp;&nbsp;
+              <input
+                type="date"
+                id="Loan_Date"
+                name="Loan_Date"
+                onChange={onLoan_DateChange}
+                value={Loan_Date}
+              />
+            </div>
+            <div
+              id="register"
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              <label
+                id="one"
+                htmlFor="Expected_Return_Date"
+                style={{ width: "150%", fontSize: "30px" }}
+              >
+                Fecha esperada devolucion:{" "}
+              </label>
+              &nbsp;&nbsp;
+              <input
+                type="date"
+                id="Expected_Return_Date"
+                name="Expected_Return_Date"
+                onChange={onExpected_Return_DateChange}
+                value={Expected_Return_Date}
+              />
+            </div>
             <br />
-          <button id="cancelButton" onClick={() => setShowLoanForm(false)}>
-            Cancelar
-          </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <button id="prestarButton" onClick={() => setShowLoanForm(false)}>
-            Prestar
-          </button>
+            <div>
+              <br />
+              <button id="cancelButton" onClick={() => setShowLoanForm(false)}>
+                Cancelar
+              </button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <button id="prestarButton" onClick={() => onRegistroLoanClick()}>
+                Prestar
+              </button>
+            </div>
           </div>
-        
-        </div>
+        </Draggable>
       )}
     </>
   );

@@ -385,6 +385,24 @@ app.get("/api/obtenerDevices", async (req, res) => {
 
 //--------------------------------------------------------------------------------------------------------------------------------
   //PRESTAMOS
+  app.get("/api/obtenerUltimoLoaId", async (req, res) => {
+    try {
+      // Buscar el último Loan_ID registrado en la base de datos
+      const lastLoan = await loans.findOne({}, { sort: { Loan_ID: -1 } });
+      
+      // Si no se encuentra ningún usuario, responder con 0 como último Loan_ID
+      if (!lastLoan) {
+        return res.status(200).json({ lastLoanId: 0 });
+      }
+      // Responder con el último Loan_ID encontrado
+      res.status(200).json({ lastLoanId: lastLoan.Loan_ID });
+    } catch (error) {
+      // Manejar errores, si los hay
+      console.error("Error al obtener el último Loan_ID:", error);
+      res.status(500).json({ message: "Error al obtener el último Loan_ID" });
+    }
+  });
+  
   app.post('/api/registrarLoan', async (req, res) => {
     try {
       const {   Loan_ID, User_ID, Device_id, Loan_Date, Expected_Return_Date, Loan_Status, Actual_Return_Date, Physical_Condition_Before, Physical_Condition_After, Loan_Comments   } = req.body;
@@ -493,7 +511,6 @@ app.get("/api/obtenerDevices", async (req, res) => {
     }
   });
 
-  
   app.put("/api/editarLoanPorLoan_ID", async (req, res) => {
     try {
       const { Loan_ID } = req.query; 
@@ -525,7 +542,7 @@ app.get("/api/obtenerDevices", async (req, res) => {
     }
   });
   
-
+ 
 //------------------------------------------------------------------------------------------------------------------------------------
 app.listen(config.port, config.hostname, () => {
 

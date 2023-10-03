@@ -63,6 +63,7 @@ const onIngresoClick = async () => {
       // Almacena la cookie en el navegador con max-age
       document.cookie = `User_id=${JSON.stringify(User_id)}; path=/; max-age=${maxAgeInSeconds}; expires=${expirationDate.toUTCString()}`;
       document.cookie = `User_name=${JSON.stringify(User_name)}; path=/; max-age=${maxAgeInSeconds}; expires=${expirationDate.toUTCString()}`;
+      document.cookie = `userType=${JSON.stringify(userType)}; path=/; max-age=${maxAgeInSeconds}; expires=${expirationDate.toUTCString()}`;
       
       if (userType === "administrador") {
         setRedirectAdmPag(true);

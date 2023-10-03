@@ -190,7 +190,7 @@ export default function UserPag() {
       Device_id: parseInt(Device_id),
       Loan_Date: new Date(Loan_Date),
       Expected_Return_Date: new Date(Expected_Return_Date),
-      Loan_Status: "prestado",
+      Loan_Status: "pendiente",
       Actual_Return_Date: "",
       Physical_Condition_Before: "",
       Physical_Condition_After: "",

@@ -383,6 +383,21 @@ app.get("/api/obtenerDevices", async (req, res) => {
   }
 });
 
+app.get("/api/obtenerDevicesCards", async (req, res) => {
+  try {
+    const device = await devices.find({Device_status: "disponible"}).toArray();
+    if (device) {
+      res.status(200).json(device);
+    } else {
+      console.log("No se encontraron dispositivos");
+      res.status(200).json({ message: "No se encontraron dispositivos" });
+    }
+  } catch (error) {
+    console.error("Error al obtener los dispositivos:", error);
+    res.status(500).json({ message: "Error al obtener los dispositivos" });
+  }
+});
+
 //--------------------------------------------------------------------------------------------------------------------------------
   //PRESTAMOS
   app.get("/api/obtenerUltimoLoaId", async (req, res) => {
@@ -430,6 +445,41 @@ app.get("/api/obtenerDevices", async (req, res) => {
       res.status(500).json({ message: 'Error al registrar prestamo' });
     }
   });
+
+  app.post('/api/registrarLoanUser', async (req, res) => {
+    try {
+      const { Loan_ID, User_ID, Device_id, Loan_Date, Expected_Return_Date, Loan_Status, Actual_Return_Date, Physical_Condition_Before, Physical_Condition_After, Loan_Comments } = req.body;
+      
+      const DataLoan = {
+        Loan_ID,
+        User_ID,
+        Device_id,
+        Loan_Date,
+        Expected_Return_Date,
+        Loan_Status,
+        Actual_Return_Date,
+        Physical_Condition_Before,
+        Physical_Condition_After,
+        Loan_Comments
+      };
+  
+      await loans.insertOne(DataLoan);
+  
+      // Modificar el Device_status de la colección loans dependiendo del Device_id
+      await devices.updateOne(
+        { Device_id: Device_id },
+        { $set: { Device_status: 'prestado' } }
+      );
+  
+      // Enviar una respuesta de éxito
+      res.status(201).json({ message: 'Prestamo registrado correctamente' });
+    } catch (error) {
+      // Manejar errores, si los hay
+      console.error('Error al registrar el prestamo:', error);
+      res.status(500).json({ message: 'Error al registrar prestamo' });
+    }
+  });
+  
 
   app.post('/api/verificarLoan_ID', async (req, res) => {
     try {

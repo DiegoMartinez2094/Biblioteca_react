@@ -105,7 +105,7 @@ export default function UserPag() {
   const onShowCardsBooksclick = async () => {
     try {
       const Device_idExistsResponse = await fetch(
-        `http://${config.hostname}:${config.port}/api/obtenerDevices`,
+        `http://${config.hostname}:${config.port}/api/obtenerDevicesCards`,
         {
           method: "GET",
           headers: {
@@ -126,8 +126,6 @@ export default function UserPag() {
   //---------------------------------------------------------------------------------------------------------------------
   //PRESTAMO
 
-  const [Loan_ID, setLoan_ID] = useState("");
-  const [User_ID, setUser_ID] = useState("");
   const [Loan_Date, setLoan_Date] = useState("");
   const [Expected_Return_Date, setExpected_Return_Date] = useState("");
   const [Loan_Status, setLoan_Status] = useState("");
@@ -199,7 +197,7 @@ export default function UserPag() {
 
     try {
       const response = await fetch(
-        `http://${config.hostname}:${config.port}/api/registrarLoan`,
+        `http://${config.hostname}:${config.port}/api/registrarLoanUser`,
         {
           method: "POST",
           headers: {

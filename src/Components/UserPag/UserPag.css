@@ -1,11 +1,10 @@
 #holausuario {
-  color: aliceblue;
-  font-size: 3rem;
-  background-color: black;
-  width: 25rem;
-  text-align: center;
-  margin-left: 20%;
+  color: rgb(255, 255, 255);
+  font-size: 60px;
+  width: 40rem;
+  text-shadow: 2px 2px 2px  rgb(3, 3, 3);
 }
+
 
 #btnSalirUser {
   background-color: #f2f3f5;
@@ -14,7 +13,8 @@
   cursor: pointer;
   font-size: 1.5rem;
   transition: background-color 0.5s ease;
-  margin-left: 89%;
+   margin-top: 10px;
+   margin-left: 10px;
 }
 #montrar_libros {
   background-color: #f2f3f5;
@@ -41,7 +41,6 @@
 
 #listadoLibros {
   padding: 5px 10px;
-
   color: #000000;
   border-color: black;
   cursor: pointer;
@@ -52,9 +51,6 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   border-radius: 10%;
 }
-
-
-
 
 .container {
   width: 240px;
@@ -142,7 +138,7 @@ p {
   appearance: none;
   border: solid 1px black;
   background:rgb(111, 68, 25);
-  color:white;
+  color:rgb(255, 255, 255);
   cursor: pointer;
   position: relative;
   margin-left: 70px;
@@ -195,8 +191,8 @@ p {
   position: fixed;
   top: 0; /* Ajusta la posición vertical según tus preferencias */
   right: 34%; /* Ajusta la posición horizontal según tus preferencias */
-  width: 50%;
-  height: 60%;
+  width: 250px;
+  height: 460px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -216,6 +212,13 @@ p {
 #cancelButton {
   background-color: red; /* Color de fondo del botón de cancelar */
   color: white; /* Color del texto del botón */
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#prestarButton {
+  background-color: rgb(0, 238, 255); /* Color de fondo del botón de cancelar */
+  color: rgb(15, 15, 15); /* Color del texto del botón */
   cursor: pointer;
   font-size: 16px;
 }

@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./UserPag.css";
 
 export default function UserPag() {
   const [userName, setUserName] = useState("");
   const [userId, setUserId] = useState("");
 
+
+
+  //------------------------------------------------------------------------------------------------------------------------------------------------------------
+  //uso de cokkies 
+  
   // Función para analizar las cookies y obtener el nombre de usuario y el id
   const getUserNameFromCookie = () => {
     const cookies = document.cookie.split("; ");
@@ -63,7 +68,7 @@ export default function UserPag() {
   const config = JSON.parse(import.meta.env.VITE_My_server);
 
   //----------------------------------------------------------------------------------------------------------
-  //Libros
+  //CardsBooks
 
   const [listadoLibrosVisible, setlistadoLibrosVisible] = useState(false);
   const [devices, setDevices] = useState([]);
@@ -71,6 +76,7 @@ export default function UserPag() {
 
   const onPrestarClick = () => {
     setShowLoanForm(true);
+    setDevice_id(deviceInfo.Device_id);
   };
 
   function togglelistadoLibros() {
@@ -78,35 +84,11 @@ export default function UserPag() {
   }
 
   const [Device_id, setDevice_id] = useState("");
-  const [Device_name, setDevice_name] = useState("");
-  const [Description_device, setDescription_device] = useState("");
-  const [Device_category, setDevice_category] = useState("");
-  const [Device_cost, setDevice_cost] = useState("");
-  const [Device_status, setDevice_status] = useState("");
-  const [Device_comments, setDevice_comments] = useState("");
   const [foundDevice, setFoundDevice] = useState(null);
-
   const onDevice_idChange = (e) => {
     setDevice_id(e.target.value);
   };
-  const onDevice_nameChange = (e) => {
-    setDevice_name(e.target.value);
-  };
-  const onDescription_deviceChange = (e) => {
-    setDescription_device(e.target.value);
-  };
-  const onDevice_categoryChange = (e) => {
-    setDevice_category(e.target.value);
-  };
-  const onDevice_costChange = (e) => {
-    setDevice_cost(e.target.value);
-  };
-  const onDevice_statusChange = (e) => {
-    setDevice_status(e.target.value);
-  };
-  const onDevice_commentsChange = (e) => {
-    setDevice_comments(e.target.value);
-  };
+
 
   useEffect(() => {
     loadDeviceFields(); // Cargar los campos de entrada cuando se actualice
@@ -114,15 +96,9 @@ export default function UserPag() {
 
   const loadDeviceFields = () => {
     setDevice_id(foundDevice ? foundDevice.Device_id : "");
-    setDevice_name(foundDevice ? foundDevice.Device_name : "");
-    setDescription_device(foundDevice ? foundDevice.Description_device : "");
-    setDevice_category(foundDevice ? foundDevice.Device_category : "");
-    setDevice_cost(foundDevice ? foundDevice.Device_cost : "");
-    setDevice_status(foundDevice ? foundDevice.Device_status : "");
-    setDevice_comments(foundDevice ? foundDevice.Device_comments : "");
   };
 
-  const onShowTableclick = async () => {
+  const onShowCardsBooksclick = async () => {
     try {
       const Device_idExistsResponse = await fetch(
         `http://${config.hostname}:${config.port}/api/obtenerDevices`,
@@ -151,9 +127,8 @@ export default function UserPag() {
   const [Loan_Date, setLoan_Date] = useState("");
   const [Expected_Return_Date, setExpected_Return_Date] = useState("");
   const [Loan_Status, setLoan_Status] = useState("");
-  const [Loan_Comments, setLoan_Comments] = useState("");
-  const [Physical_Condition_Before, setPhysical_Condition_Before] =
-    useState("");
+ 
+  const [Physical_Condition_Before, setPhysical_Condition_Before] =useState("");
   const [Physical_Condition_After, setPhysical_Condition_After] = useState("");
   const [Actual_Return_Date, setActual_Return_Date] = useState("");
 
@@ -177,12 +152,7 @@ export default function UserPag() {
   const onLoan_StatusChange = (e) => {
     setLoan_Status(e.target.value);
   };
-  const onLoan_CommentsChange = (e) => {
-    setLoan_Comments(e.target.value);
-  };
-  const onPhysical_Condition_BeforeChange = (e) => {
-    setPhysical_Condition_Before(e.target.value);
-  };
+
   const onPhysical_Condition_AfterChange = (e) => {
     setPhysical_Condition_After(e.target.value);
   };
@@ -198,13 +168,6 @@ export default function UserPag() {
     setLoan_Date(foundLoan ? foundLoan.Loan_Date : "");
     setExpected_Return_Date(foundLoan ? foundLoan.Expected_Return_Date : "");
     setLoan_Status(foundLoan ? foundLoan.Loan_Status : "");
-    setLoan_Comments(foundLoan ? foundLoan.Loan_Comments : "");
-    setPhysical_Condition_Before(
-      foundLoan ? foundLoan.Physical_Condition_Before : ""
-    );
-    setPhysical_Condition_After(
-      foundLoan ? foundLoan.Physical_Condition_After : ""
-    );
     setActual_Return_Date(foundLoan ? foundLoan.Actual_Return_Date : "");
   };
 
@@ -215,8 +178,7 @@ export default function UserPag() {
       !Device_id ||
       !Loan_Date ||
       !Expected_Return_Date ||
-      !Loan_Status ||
-      !Physical_Condition_Before
+      !Loan_Status
     ) {
       alert("Por favor, complete todos los campos.");
       return;
@@ -305,56 +267,6 @@ export default function UserPag() {
     }
   };
 
-  const onDeleteLoanClick = async () => {
-    if (!Loan_ID) {
-      alert("Por favor, ingrese un id de prestamo");
-      return;
-    }
-    try {
-      const existingLoan = await fetch(
-        `http://${config.hostname}:${config.port}/api/verificarLoan_ID`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ Loan_ID: parseInt(Loan_ID) }),
-        }
-      );
-
-      if (existingLoan.status === 200) {
-        const LoanDataDelete = await fetch(
-          `http://${config.hostname}:${config.port}/api/eliminarLoanPorLoan_ID?Loan_ID=${Loan_ID}`,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (LoanDataDelete.status === 200) {
-          alert("prestamo eliminado correctamente");
-          setLoan_ID("");
-          setUser_ID("");
-          setDevice_id("");
-          setLoan_Date("");
-          setExpected_Return_Date("");
-          setLoan_Status("");
-          setLoan_Comments("");
-          setPhysical_Condition_Before("");
-          setPhysical_Condition_After("");
-          setActual_Return_Date("");
-        }
-      } else {
-        alert("id prestamo no encontrado");
-        setFoundDevice(null);
-      }
-    } catch (error) {
-      console.error("Error al realizar la solicitud:", error);
-    }
-  };
-
   //----------------------------------------------------------------------------------------------------
 
   return (
@@ -368,23 +280,25 @@ export default function UserPag() {
       >
         Cerrar sesión
       </button>
-      <h1 id="holausuario">Hola, {userName}</h1>
       <div>
-        {" "}
+  <h1 id="holausuario">Hola {userName.replace(/"/g, '')} :)</h1>
+</div>
+
+      
+      <button
+      className="button"
+        onClick={onShowCardsBooksclick}  
+      >
+        Mostrar libros
+      </button>
+
         <button
-          id="listadoLibros"
-          style={{ marginLeft: "50px", marginBottom: "10px" }}
+          className="button"
           onClick={togglelistadoLibros}
         >
-          Listado de Libros
+          Ocultar libros
         </button>
-      </div>
-      <button
-        onClick={onShowTableclick}
-        style={{ marginLeft: "100px", fontSize: "30px" }}
-      >
-        Refrescar lista
-      </button>
+    
       {listadoLibrosVisible && (
         <div id="deviceList">
           {devices.map((device) => (
@@ -395,7 +309,17 @@ export default function UserPag() {
                 <button className="button">
                   <span className="button_lg">
                     <span className="button_sl"></span>
-                    <span className="button_text" onClick={onPrestarClick}>
+                    <span
+                      className="button_text"
+                      onClick={() =>
+                        onPrestarClick({
+                          Device_id: device.Device_id,
+                          Device_name: device.Device_name,
+                          Description_device: device.Description_device,
+                          Device_category: device.Device_category,
+                        })
+                      }
+                    >
                       Prestar
                     </span>
                   </span>
@@ -413,7 +337,6 @@ export default function UserPag() {
 
       {showLoanForm && (
         <div id="formRegisLoans">
-          {/* Agrega aquí los campos del formulario y sus respectivos onChange */}
           <h1>Formulario de prestamo</h1>
           <div id="register" style={{ display: "flex", alignItems: "center" }}>
             <label id="one" htmlFor="Loan_ID" style={{ width: "70%" }}>
@@ -485,80 +408,9 @@ export default function UserPag() {
               value={Expected_Return_Date}
             />
           </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <label id="one" htmlFor="Loan_Status" style={{ width: "100%" }}>
-              Estado del prestamo:{" "}
-            </label>
-            &nbsp;&nbsp;
-            <select
-              id="Loan_Status"
-              name="Loan_Status"
-              onChange={onLoan_StatusChange}
-              value={Loan_Status}
-            >
-              <option value="">Estado prestamo</option>
-              <option value="pendiente">pendiente</option>
-              <option value="entregado">entregado</option>
-              <option value="reservado">reservado</option>
-            </select>
-          </div>
-          <div id="register" style={{ display: "flex", alignItems: "center" }}>
-            <label id="one" htmlFor="Loan_Comments">
-              Comentario:{" "}
-            </label>
-            &nbsp;&nbsp;
-            <textarea
-              type="text"
-              id="Loan_Comments"
-              name="Loan_Comments"
-              onChange={onLoan_CommentsChange}
-              value={Loan_Comments}
-            />
-          </div>
-          &nbsp;&nbsp;
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <label
-              id="one"
-              htmlFor="Physical_Condition_Before"
-              style={{ width: "100%" }}
-            >
-              Estado fisico del libro antes:{" "}
-            </label>
-            &nbsp;&nbsp;
-            <select
-              id="Physical_Condition_Before"
-              name="Physical_Condition_Before"
-              onChange={onPhysical_Condition_BeforeChange}
-              value={Physical_Condition_Before}
-            >
-              <option value="">Seleccione estado</option>
-              <option value="Bien">Bien</option>
-              <option value="desgastado">desgastado</option>
-              <option value="dañado">dañado</option>
-            </select>
-          </div>{" "}
-          &nbsp;&nbsp;
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <label
-              id="one"
-              htmlFor="Physical_Condition_After"
-              style={{ width: "100%" }}
-            >
-              Estado del libro después:{" "}
-            </label>
-            &nbsp;&nbsp;
-            <select
-              id="Physical_Condition_After"
-              name="Physical_Condition_After"
-              onChange={onPhysical_Condition_AfterChange}
-              value={Physical_Condition_After}
-            >
-              <option value="">Seleccione estado</option>
-              <option value="Bien">Bien</option>
-              <option value="desgastado">desgastado</option>
-              <option value="dañado">dañado</option>
-            </select>
-          </div>
+         
+        
+        
           <div id="register" style={{ display: "flex", alignItems: "center" }}>
             <label
               id="one"
@@ -567,7 +419,7 @@ export default function UserPag() {
             >
               Fecha real devolucion:{" "}
             </label>
-            &nbsp;&nbsp;
+   
             <input
               type="date"
               id="Actual_Return_Date"
@@ -575,11 +427,18 @@ export default function UserPag() {
               onChange={onActual_Return_DateChange}
               value={Actual_Return_Date}
             />
+            
           </div>
+          <div>
+            <br />
           <button id="cancelButton" onClick={() => setShowLoanForm(false)}>
             Cancelar
+          </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <button id="prestarButton" onClick={() => setShowLoanForm(false)}>
+            Prestar
           </button>
-          {/* Agrega el botón de enviar el formulario */}
+          </div>
+        
         </div>
       )}
     </>

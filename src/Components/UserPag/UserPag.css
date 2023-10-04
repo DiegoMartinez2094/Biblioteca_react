@@ -2,11 +2,11 @@
   color: rgb(255, 255, 255);
   font-size: 60px;
   width: 40rem;
-  text-shadow: 2px 2px 2px  rgb(3, 3, 3);
+  text-shadow: 2px 2px 2px  rgb(205, 201, 178);
 }
 
 #btnSalirUser {
-  background-color:rgb(111, 68, 25);
+  background-color:rgb(86, 51, 16);
   color: #ffffff;
   border-color: rgb(255, 255, 255);
   cursor: pointer;
@@ -84,7 +84,7 @@
 .cover {
   top: 0;
   position: absolute;
-  background-color: rgb(182, 114, 47);
+  background-color: rgba(6, 6, 6, 0.889);
   width: 100%;
   height: 100%;
   border-radius: 10px;
@@ -95,7 +95,8 @@
   -ms-transform-origin: 0;
   transform-origin: 0;
   -webkit-box-shadow: 1px 1px 12px #000;
-  box-shadow: 1px 1px 12px #000;
+  box-shadow: 1px 1px 12px #f9f9f9;
+  
 }
 
 .book:hover .cover {
@@ -135,13 +136,12 @@ p {
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
-  border: solid 1px black;
-  background:rgb(111, 68, 25);
+  border: solid 1px rgb(255, 249, 249);
+  background:rgb(95, 61, 27);
   color:rgb(255, 255, 255);
   cursor: pointer;
   position: relative;
   margin-left: 70px;
-
   font-weight: bold;
   font-size: 25px;
   transition: all .15s ease;
@@ -196,7 +196,7 @@ p {
   flex-direction: column;
   justify-content: center;
   z-index: 9999; 
-  background-color: #ffffff;
+  background-color: #262626;
   padding: 8px;
   text-align: center;
   border-radius: 10%;
@@ -208,7 +208,7 @@ p {
 #h1 {
   font-size: 24px;
 
-  color: rgb(0, 0, 0); 
+  color: rgb(211, 211, 211); 
 }
 
 /* Estilos para el botón de cancelar */

@@ -20,8 +20,8 @@ body {
     margin-bottom: 10px; 
     width:400px;
     height:70px;
-    background: linear-gradient(to left top, #5162f5 50%, #3b4dee 50%);
-    color:#080808;
+    background: linear-gradient(to left top, #090909 50%, #090909 50%);
+    color:rgb(175, 109, 12);
     font-size: 40px;
     letter-spacing: 3px;
     font-family: 'Lato';
@@ -41,7 +41,7 @@ button:hover{
   font-size: 300px;
   text-align: center;
   text-shadow: 
-  2px 2px 0 white,
+  2px 2px 0 rgb(175, 109, 12),
  -2px -2px 0 white,
   2px -2px 0 white,
  -2px 2px 0 white;

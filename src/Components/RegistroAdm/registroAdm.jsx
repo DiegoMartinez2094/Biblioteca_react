@@ -390,7 +390,7 @@ export default function RegistroForm() {
         <br />
         
       </div>
-      <h4>Buscar o eliminar usuario por el correo</h4>&nbsp;&nbsp;&nbsp; &nbsp;
+      <h4  style={{ color: "white" }}>Buscar o eliminar usuario por el correo</h4>&nbsp;&nbsp;&nbsp; &nbsp;
       <button id="registro_adm" onClick={onRegistroClick}>
         Registrar usuario
       </button>

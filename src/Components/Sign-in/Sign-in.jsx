@@ -26,57 +26,73 @@ export default function SignIn() {
     setShowPassword(!showPassword);
   };
 
-  const onIngresoClick = async () => {
-    if (!Password || !Email) {
-      // Validar que todos los campos estén llenos
-      alert("Por favor, complete todos los campos.");
-      return;
-    }
+ 
+const onIngresoClick = async () => {
+  if (!Password || !Email) {
+    // Validar que todos los campos estén llenos
+    alert("Por favor, complete todos los campos.");
+    return;
+  }
 
-    try {
-      const emailycontraseñaExistsResponse = await fetch(
-        `http://${config.hostname}:${config.port}/api/verificarEmailyContras`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ Email, Password }),
-        }
-      );
-
-      if (emailycontraseñaExistsResponse.ok) {
-        const responseData = await emailycontraseñaExistsResponse.json();
-        const userType = responseData.userType;
-
-        if (userType === "administrador") {
-          setRedirectAdmPag(true);
-        } else if (userType === "trabajador") {
-           setRedirectWorkerPag(true);
-        } else if (userType === "usuario") {
-          setRedirectUserPag(true);
-        }
-
-        setEmail("");
-        setPassword("");
-      } else if (emailycontraseñaExistsResponse.status === 401) {
-        alert("Correo o Contraseña incorrecta");
-      } else if (emailycontraseñaExistsResponse.status === 404) {
-        // Credenciales incorrectas
-        alert("Credenciales no encontradas");
-        setEmail("");
-        setPassword("");
-      } else {
-        // Manejar otros errores aquí
-        console.error(
-          "Error en la solicitud:",
-          emailycontraseñaExistsResponse.statusText
-        );
+  try {
+    const emailycontraseñaExistsResponse = await fetch(
+      `http://${config.hostname}:${config.port}/api/verificarEmailyContras`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ Email, Password }),
       }
-    } catch (error) {
-      console.error("Error al realizar la solicitud:", error);
+    );
+
+    if (emailycontraseñaExistsResponse.ok) {
+      const responseData = await emailycontraseñaExistsResponse.json();
+   
+      const userType = responseData.userType;
+      const User_name = responseData.User_name;
+      const User_id = responseData.User_id;
+ 
+
+      const maxAgeInSeconds =3600; //segundo de expiracion de la cookie (1hora)
+
+      // Calcula la fecha de expiración
+      const expirationDate = new Date();
+      expirationDate.setTime(expirationDate.getTime() + maxAgeInSeconds * 1000);
+      
+      // Almacena la cookie en el navegador con max-age
+      document.cookie = `User_id=${JSON.stringify(User_id)}; path=/; max-age=${maxAgeInSeconds}; expires=${expirationDate.toUTCString()}`;
+      document.cookie = `User_name=${JSON.stringify(User_name)}; path=/; max-age=${maxAgeInSeconds}; expires=${expirationDate.toUTCString()}`;
+      document.cookie = `userType=${JSON.stringify(userType)}; path=/; max-age=${maxAgeInSeconds}; expires=${expirationDate.toUTCString()}`;
+      
+      if (userType === "administrador") {
+        setRedirectAdmPag(true);
+      } else if (userType === "trabajador") {
+        setRedirectWorkerPag(true);
+      } else if (userType === "usuario") {
+        setRedirectUserPag(true);
+      }
+
+      setEmail("");
+      setPassword("");
+    } else if (emailycontraseñaExistsResponse.status === 401) {
+      alert("Correo o Contraseña incorrecta");
+    } else if (emailycontraseñaExistsResponse.status === 404) {
+      // Credenciales incorrectas
+      alert("Credenciales no encontradas");
+      setEmail("");
+      setPassword("");
+    } else {
+      // Manejar otros errores aquí
+      console.error(
+        "Error en la solicitud:",
+        emailycontraseñaExistsResponse.statusText
+      );
     }
-  };
+  } catch (error) {
+    console.error("Error al realizar la solicitud:", error);
+  }
+};
 
   return (
     <>

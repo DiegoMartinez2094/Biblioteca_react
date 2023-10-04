@@ -79,7 +79,7 @@ db.createCollection("device",{
         Device_status: {
           bsonType: "string",
           description: "Device_status could be of string type and is required",
-          enum: ["disponible", "prestado"],
+          enum: ["disponible", "prestado", "reservado"],
         },
         Device_cost: {
           bsonType: "int",
@@ -144,12 +144,12 @@ db.createCollection("loan",{
         Physical_Condition_Before  : {
           bsonType: "string",
           description: "Physical_Condition_Before  could be of string type and is required",
-          enum: ["Bien", "desgastado", "dañado"],
+          enum: ["Bien", "desgastado", "dañado", ""],
         },
         Physical_Condition_After  : {
           bsonType: "string",
           description: "Physical_Condition_After  could be of string type and is required",
-          enum: ["Bien", "desgastado", "dañado"],
+          enum: ["Bien", "desgastado", "dañado", ""],
         }
        }
     } 

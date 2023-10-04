@@ -31,7 +31,7 @@
   width: 19rem;
   padding-left: 10px;
   padding-right: 10px;
-  background-color: #ffffff;
+  background-color: #75727277;
   text-align: center;
   padding-top: 3px;
   border-radius: 10px;
@@ -45,7 +45,7 @@
   max-width: 19rem;
   padding-left: 10px;
   padding-right: 10px;
-  background-color: #ffffff;
+  background-color: #75727277;
   text-align: center;
   padding-top: 3px;
   border-radius: 10px;
@@ -54,7 +54,7 @@
 #inscLibro {
   padding: 5px 10px;
   background-color: #f2f3f5;
-  color: #000000;
+  color: #0e0d0d;
   border-color: black;
   cursor: pointer;
   font-size: 40px;
@@ -71,7 +71,7 @@
   min-width: 10rem;
   padding-left: 10px;
   padding-right: 10px;
-  background-color: #ffffff;
+  background-color:  #b8b4b494;
   text-align: center;
   padding-top: 3px;
   border-radius: 10px;
@@ -87,7 +87,7 @@
   max-width: 19rem;
   padding-left: 10px;
   padding-right: 10px;
-  background-color: #ffffff;
+  background-color:  #75727277;
   text-align: center;
   padding-top: 3px;
   border-radius: 10px;

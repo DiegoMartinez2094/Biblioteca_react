@@ -1,10 +1,46 @@
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import "./Sign-in.css";
+import ReactModal from 'react-modal';
 
 
 export default function SignIn() {
   const config = JSON.parse(import.meta.env.VITE_My_server);
+//---------------------------------------------------------------------------------------
+//MODALES
+
+const [modalIsOpen, setModalIsOpen] = useState(false);
+const [modalMessage, setModalMessage] = useState(false);
+const [modalIsOpen2, setModalIsOpen2] = useState(false);
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+  const openModal2 = () => {
+    setModalIsOpen2(true);
+  };
+
+  const closeModal2 = () => {
+    setModalIsOpen2(false);
+  };
+
+  
+  const openModal1 = () => {
+    setModalMessage(true);
+  };
+
+  const closeModal1 = () => {
+    setModalMessage(false);
+  };
+
+
+
+  //---------------------------------------------------------------------------------------
   
   const [Password, setPassword] = useState("");
   const [Email, setEmail] = useState("");
@@ -30,7 +66,7 @@ export default function SignIn() {
 const onIngresoClick = async () => {
   if (!Password || !Email) {
     // Validar que todos los campos estén llenos
-    alert("Por favor, complete todos los campos.");
+    openModal();
     return;
   }
 
@@ -76,10 +112,12 @@ const onIngresoClick = async () => {
       setEmail("");
       setPassword("");
     } else if (emailycontraseñaExistsResponse.status === 401) {
-      alert("Correo o Contraseña incorrecta");
+      
+      openModal1();
     } else if (emailycontraseñaExistsResponse.status === 404) {
       // Credenciales incorrectas
-      alert("Credenciales no encontradas");
+      
+      openModal2();
       setEmail("");
       setPassword("");
     } else {
@@ -96,7 +134,50 @@ const onIngresoClick = async () => {
 
   return (
     <>
+     <ReactModal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Campos faltantes"
+        ariaHideApp={false}
+        className="modal-content"
+        overlayClassName="modal-overlay"
+      >
+        <div>
+          <h4 id="textModal">Por favor, complete todos los campos.</h4>
+          <button onClick={closeModal}>Cerrar</button>
+        </div>
+      </ReactModal>
+
+      <ReactModal
+        isOpen={modalIsOpen2}
+        onRequestClose={closeModal2}
+        contentLabel="Campos no encontrados"
+        ariaHideApp={false}
+        className="modal-content"
+        overlayClassName="modal-overlay"
+      >
+        <div>
+          <h4 id="textModal">Credenciales no encontradas</h4>
+          <button onClick={closeModal2}>Cerrar</button>
+        </div>
+      </ReactModal>
+
+      <ReactModal
+        isOpen={modalMessage}
+        onRequestClose={closeModal1}
+        contentLabel="Campos faltantes"
+        ariaHideApp={false}
+        className="modal-content"
+        overlayClassName="modal-overlay"
+      >
+        <div>
+          <h4 id="textModal">Correo o Contraseña incorrecta</h4>
+          <button onClick={closeModal1}>Cerrar</button>
+        </div>
+      </ReactModal>
+
       <div id="container">
+
         <div id="register" style={{ display: "flex", alignItems: "center" }}>
           <label id="one" htmlFor="Email">
             Correo electrónico:{" "}

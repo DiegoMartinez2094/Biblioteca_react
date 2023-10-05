@@ -45,10 +45,11 @@
   max-width: 19rem;
   padding-left: 10px;
   padding-right: 10px;
-  background-color: #d6d2d277;
+  background-color: #616161d3;
   text-align: center;
   padding-top: 3px;
   border-radius: 10px;
+  
 }
 
 #inscLibro {
@@ -71,7 +72,7 @@
   min-width: 10rem;
   padding-left: 10px;
   padding-right: 10px;
-  background-color:  #b8b4b494;
+  background-color:  #e9e6e6;
   text-align: center;
   padding-top: 3px;
   border-radius: 10px;
@@ -87,7 +88,7 @@
   max-width: 19rem;
   padding-left: 10px;
   padding-right: 10px;
-  background-color:  #75727277;
+  background-color:  #757272be;
   text-align: center;
   padding-top: 3px;
   border-radius: 10px;

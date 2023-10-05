@@ -287,7 +287,7 @@ export default function UserPag() {
       {showLoanForm && (
         <Draggable>
           <div id="formRegisLoanss">
-            <h1>Formulario de prestamo</h1>
+            <h1 style={{ color: "white" }}>Formulario de prestamo</h1>
 
             <div
               id="register"

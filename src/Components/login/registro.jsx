@@ -219,7 +219,7 @@ export default function RegistroForm() {
         overlayClassName="modal-overlay" // Estilos CSS para el fondo del modal
       >
         <div>
-          <h4 id="textModal">Se produjo un error en el registro.</h4>
+          <h4 id="textModal">Este orreo Electronico ya lo usa otro usuario.</h4>
           <button onClick={closeErrorModal}>Cerrar</button>
         </div>
       </ReactModal>

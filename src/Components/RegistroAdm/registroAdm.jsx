@@ -220,7 +220,15 @@ export default function RegistroForm() {
           setPhone("");
           setAddress("");
           setRole("");
-        } else {
+        } else if (userDataDelete.status === 403){
+          alert("Correo electrónico del Administrator no se puede eliminar");
+          setUser_name("");
+          setEmail("");
+          setPassword("");
+          setPhone("");
+          setAddress("");
+          setRole("");
+        }else{
           alert("Correo electrónico no encontrado");
           setFoundUser(null);
         }
@@ -280,7 +288,10 @@ export default function RegistroForm() {
           setPhone("");
           setAddress("");
           setRole("");
-        } else {
+        } else if(userDataUpdate.status === 403){
+          alert("Correo electrónico del administrador no se puede editar");
+        }
+        else {
           alert("Correo electrónico no encontrado");
           setFoundUser(null);
         }

@@ -167,6 +167,12 @@ export default config;
     try {
       const { Email } = req.query; // Obtén el correo electrónico desde la consulta
   
+      if (Email === "Diego@gmail.com") {
+        // Si el correo electrónico es "Diego@gmail.com", no se permite eliminar
+        res.status(403).json({ message: 'No puedes eliminar este usuario' });
+        return;
+      }
+  
       // Elimina el usuario de la colección 'usuarios' por correo electrónico
       const result = await usuarios.deleteOne({ Email: Email });
   
@@ -183,11 +189,18 @@ export default config;
       res.status(500).json({ message: "Error al eliminar el usuario por correo electrónico" });
     }
   });
+  
 
   app.put("/api/editarUsuarioPorEmail", async (req, res) => {
     try {
       const { Email } = req.query; // Obtén el correo electrónico desde la consulta
       const { User_name, Password, Phone, Address, Role } = req.body; // Obtén los datos a actualizar desde el cuerpo de la solicitud
+  
+      if (Email === "Diego@gmail.com") {
+        // Si el correo electrónico es "Diego@gmail.com", no se permite la edición
+        res.status(403).json({ message: 'No puedes editar este usuario' });
+        return;
+      }
   
       // Edita el usuario de la colección 'usuarios' por correo electrónico
       const result = await usuarios.updateOne({ Email: Email }, {
@@ -213,6 +226,7 @@ export default config;
       res.status(500).json({ message: "Error al editar el usuario por correo electrónico" });
     }
   });
+  
 
   //---------------------------------------------------------------------------------------------------------------------------------
 

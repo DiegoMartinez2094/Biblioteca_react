@@ -1,9 +1,51 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import ReactModal from "react-modal";
 
 import "./registro.css";
 
 export default function RegistroForm() {
+  const [emailModalIsOpen, setEmailModalIsOpen] = useState(false);
+  const [fieldsModalIsOpen, setFieldsModalIsOpen] = useState(false);
+  const [successModalIsOpen, setSuccessModalIsOpen] = useState(false);
+  const [errorModalIsOpen, setErrorModalIsOpen] = useState(false);
+
+  //-----------------------------------------------------------------------------------------------------------------------------------------
+  //modales:
+
+  const openEmailModal = () => {
+    setEmailModalIsOpen(true);
+  };
+
+  const closeEmailModal = () => {
+    setEmailModalIsOpen(false);
+  };
+
+  const openFieldsModal = () => {
+    setFieldsModalIsOpen(true);
+  };
+
+  const closeFieldsModal = () => {
+    setFieldsModalIsOpen(false);
+  };
+
+  const openSuccessModal = () => {
+    setSuccessModalIsOpen(true);
+  };
+
+  const closeSuccessModal = () => {
+    setSuccessModalIsOpen(false);
+  };
+
+  const openErrorModal = () => {
+    setErrorModalIsOpen(true);
+  };
+
+  const closeErrorModal = () => {
+    setErrorModalIsOpen(false);
+  };
+
+  //--------------------------------------------------------------------------------------------------------------------------------------------
 
   const config = JSON.parse(import.meta.env.VITE_My_server);
 
@@ -36,13 +78,14 @@ export default function RegistroForm() {
   const onRegistroClick = async () => {
     if (!User_name || !Password || !Email || !Phone || !Address) {
       // Validar que todos los campos estén llenos
-      alert("Por favor, complete todos los campos.");
+      openFieldsModal();
       return;
     }
 
-    if ( Email.indexOf('@') === -1 || Email.indexOf('.') === -1) {
+    if (Email.indexOf("@") === -1 || Email.indexOf(".") === -1) {
       // Validar que el campo de correo electrónico contenga al menos una "@" y al menos un "."
-      alert("Por favor, ingrese un correo electrónico válido.");
+
+      openEmailModal();
       return;
     }
 
@@ -61,7 +104,7 @@ export default function RegistroForm() {
 
       if (emailExistsResponse.status === 200) {
         // El correo electrónico ya está registrado
-        alert("Correo electrónico usado anteriormente ");
+        openErrorModal();
         return;
       }
       // Obtener el último User_id registrado desde el servidor
@@ -103,7 +146,7 @@ export default function RegistroForm() {
       );
 
       if (response.status === 201) {
-        alert("Usuario registrado correctamente");
+        openSuccessModal();
 
         // Limpiar los campos después del registro exitoso
         setUser_name("");
@@ -129,6 +172,57 @@ export default function RegistroForm() {
 
   return (
     <div id="container">
+      <ReactModal
+        isOpen={emailModalIsOpen}
+        onRequestClose={closeEmailModal}
+        contentLabel="Mensaje de correo electrónico no válido"
+        ariaHideApp={false} // Necesario para evitar errores de accesibilidad
+        className="modal-content" // Estilos CSS para el modal
+        overlayClassName="modal-overlay" // Estilos CSS para el fondo del modal
+      >
+        <h4 id="textModal">Por favor, ingrese un correo electrónico válido</h4>
+        <button onClick={closeEmailModal}>Cerrar</button>
+      </ReactModal>
+      {/* Modal para campos faltantes */}
+      <ReactModal
+        isOpen={fieldsModalIsOpen}
+        onRequestClose={closeFieldsModal}
+        contentLabel="Campos faltantes"
+        ariaHideApp={false} // Necesario para evitar errores de accesibilidad
+        className="modal-content" // Estilos CSS para el modal
+        overlayClassName="modal-overlay" // Estilos CSS para el fondo del modal
+      >
+        <h4 id="textModal">Por favor, complete todos los campos.</h4>
+        <button onClick={closeFieldsModal}>Cerrar</button>
+      </ReactModal>
+      {/* Modal para registro exitoso */}
+      <ReactModal
+        isOpen={successModalIsOpen}
+        onRequestClose={closeSuccessModal}
+        contentLabel="Registro exitoso"
+        ariaHideApp={false} // Necesario para evitar errores de accesibilidad
+        className="modal-content" // Estilos CSS para el modal
+        overlayClassName="modal-overlay" // Estilos CSS para el fondo del modal
+      >
+        <div>
+          <h4 id="textModal">Usuario registrado correctamente.</h4>
+          <button onClick={closeSuccessModal}>Cerrar</button>
+        </div>
+      </ReactModal>
+      {/* Modal para error en el registro */}
+      <ReactModal
+        isOpen={errorModalIsOpen}
+        onRequestClose={closeErrorModal}
+        contentLabel="Error en el registro"
+        ariaHideApp={false} // Necesario para evitar errores de accesibilidad
+        className="modal-content" // Estilos CSS para el modal
+        overlayClassName="modal-overlay" // Estilos CSS para el fondo del modal
+      >
+        <div>
+          <h4 id="textModal">Se produjo un error en el registro.</h4>
+          <button onClick={closeErrorModal}>Cerrar</button>
+        </div>
+      </ReactModal>
       <div id="register" style={{ display: "flex", alignItems: "center" }}>
         <label id="one" htmlFor="User_name">
           Nombre:{" "}
@@ -211,7 +305,7 @@ export default function RegistroForm() {
         />
       </div>
       <Link to={"/"}>
-        <button id="btn-atras" >←</button>
+        <button id="btn-atras">←</button>
       </Link>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <button id="registro_adm" onClick={onRegistroClick}>

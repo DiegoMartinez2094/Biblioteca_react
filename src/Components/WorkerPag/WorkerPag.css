@@ -45,7 +45,7 @@
   max-width: 19rem;
   padding-left: 10px;
   padding-right: 10px;
-  background-color: #75727277;
+  background-color: #d6d2d277;
   text-align: center;
   padding-top: 3px;
   border-radius: 10px;
@@ -116,4 +116,54 @@ td {
 
 th {
   background-color: #f2f2f2;
+}
+
+
+/* Estilos para el modal */
+.modal-content {
+  background-color: rgb(5, 5, 5);
+  padding: 20px;
+  border-radius: 4px;
+  max-width: 400px;
+  max-height: 300px;
+  position: relative;
+  
+}
+
+/* Estilos para el fondo del modal */
+.modal-overlay {
+  background-color: rgba(36, 31, 105, 0.342); /* Fondo semitransparente */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Z-index alto para asegurar que esté por encima de otros elementos */
+  
+}
+
+/* Estilos para el botón de Cerrar dentro del modal */
+.modal-content button {
+  background-color: #e6e5e5; /* Color de fondo */
+  color: rgb(8, 8, 8); /* Color del texto */
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 150px;
+  font-size: 20px;
+}
+
+/* Estilos para el botón de Cerrar al pasar el cursor por encima */
+.modal-content button:hover {
+  background-color: #e0e0e0; /* Cambiar color al pasar el cursor */
+}
+
+#textModal{
+  font-size: 30px;
+  text-align: center;
+  color: #e0e0e0;
 }
